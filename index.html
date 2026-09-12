@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RETROBOX·40 — Virtual Retro Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ BOOT / POWER ON ============ -->
+<div id="bootScreen" class="screen active">
+  <div class="boot-inner">
+    <div class="power-ring">
+      <div class="power-core"></div>
+      <div class="power-icon">⏻</div>
+    </div>
+    <div class="boot-logo">RETRO<span>BOX</span><em>·40</em></div>
+    <div class="boot-sub">VIRTUAL RETRO CONSOLE</div>
+    <div class="boot-press" id="bootPress">PRESS ANY KEY TO POWER ON</div>
+  </div>
+  <div class="scanlines"></div>
+</div>
+
+<!-- ============ CONSOLE LOADING ============ -->
+<div id="loadingScreen" class="screen">
+  <div class="load-inner">
+    <div class="load-logo">RETRO<span>BOX</span><em>·40</em></div>
+    <div class="load-ring"><div class="load-arc"></div><div class="load-dot"></div></div>
+    <div class="load-text">LOADING<span class="dots">...</span></div>
+    <div class="load-bar"><div class="load-fill" id="loadFill"></div></div>
+    <div class="load-pct" id="loadPct">0%</div>
+  </div>
+  <canvas id="loadParticles"></canvas>
+  <div class="scanlines"></div>
+</div>
+
+<!-- ============ MAIN MENU (XMB style) ============ -->
+<div id="menuScreen" class="screen">
+  <div class="menu-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-vignette"></div>
+  </div>
+
+  <header class="menu-top">
+    <div class="console-brand">RETRO<span>BOX</span><em>·40</em></div>
+    <div class="menu-title-wrap">
+      <div class="menu-title" id="menuTitle">RETRO GAMES</div>
+      <div class="menu-subtitle" id="menuSubtitle">40 BUILT-IN CLASSICS</div>
+    </div>
+    <div class="clock glass-chip" id="menuClock">00:00</div>
+  </header>
+
+  <aside class="cat-rail" id="catRail"></aside>
+
+  <main class="carousel-zone">
+    <div class="carousel" id="carousel"></div>
+    <div class="settings-panel glass hidden" id="settingsPanel"></div>
+  </main>
+
+  <section class="info-panel glass" id="infoPanel">
+    <div class="info-icon" id="infoIcon">🎮</div>
+    <div class="info-main">
+      <div class="info-name-row">
+        <span class="info-name" id="infoName">RETRO GAMES</span>
+        <span class="info-badge" id="infoBadge">👥 2P</span>
+      </div>
+      <div class="info-genre" id="infoGenre">ARCADE / CLASSIC</div>
+      <div class="info-desc" id="infoDesc">Select a game and press ENTER to start.</div>
+    </div>
+    <button class="play-btn" id="playBtn">▶ PLAY</button>
+  </section>
+
+  <footer class="hint-bar">
+    <span class="hint-count" id="hintCount">40 GAMES</span>
+    <span class="hint-keys">
+      <b>← →</b> SELECT&nbsp;&nbsp;<b>ENTER</b> START&nbsp;&nbsp;<b>ESC</b> BACK
+    </span>
+  </footer>
+</div>
+
+<!-- ============ PLAYER MODE SELECT ============ -->
+<div id="modeScreen" class="screen overlay-screen">
+  <div class="mode-box glass">
+    <div class="mode-head">
+      <div class="mode-icon" id="modeIcon">🎮</div>
+      <div class="mode-title" id="modeGameName">GAME</div>
+    </div>
+    <div class="mode-label">PLAYER MODE</div>
+    <div class="mode-options" id="modeOptions"></div>
+    <div class="mode-hint">↑ ↓ SELECT &nbsp;·&nbsp; ENTER START &nbsp;·&nbsp; ESC BACK</div>
+  </div>
+</div>
+
+<!-- ============ GAME LOADING ============ -->
+<div id="gameLoading" class="screen overlay-screen">
+  <div class="gl-box glass">
+    <div class="gl-icon" id="glIcon">🐸</div>
+    <div class="gl-name" id="glName">FROGGER</div>
+    <div class="gl-bar"><div class="gl-fill" id="glFill"></div></div>
+    <div class="gl-text">LOADING GAME<span class="dots">...</span></div>
+  </div>
+</div>
+
+<!-- ============ GAME SCREEN ============ -->
+<div id="gameScreen" class="screen">
+  <div class="game-frame">
+    <canvas id="gameCanvas" width="960" height="540"></canvas>
+    <div class="game-glow"></div>
+  </div>
+  <div class="game-back-hint">P PAUSE · ESC MENU</div>
+</div>
+
+<script src="js/audio.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/input.js"></script>
+<script src="js/framework.js"></script>
+<script src="js/games/core.js"></script>
+<script src="js/games/registry.js"></script>
+<script src="js/games/setA.js"></script>
+<script src="js/games/setB.js"></script>
+<script src="js/games/setC.js"></script>
+<script src="js/games/setD.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

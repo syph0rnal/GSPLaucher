@@ -1,0 +1,47 @@
+/* ============================================================
+   Registry — 40 games metadata
+   ============================================================ */
+const GAMES = [
+  { id: 'frogger',    icon: '🐸', name: 'FROGGER',        genre: 'Arcade / Classic',        twoP: false, color: [110, 200, 90],  desc: 'Help the frog cross the busy road and the river.',       game: 'FroggerGame' },
+  { id: 'mario',      icon: '🍄', name: 'SUPER MARIO BROS.', genre: 'Platformer / Adventure', twoP: true,  color: [230, 90, 60],   desc: 'Run, jump and stomp through the Mushroom Kingdom.',      game: 'MarioGame' },
+  { id: 'battlecity', icon: '🎖️', name: 'BATTLE CITY',     genre: 'Tank / Arcade',           twoP: true,  color: [90, 170, 90],   desc: 'Command a tank, destroy enemies and defend your base.',  game: 'TankGame' },
+  { id: 'duckhunt',   icon: '🦆', name: 'DUCK HUNT',       genre: 'Shooter / Classic',       twoP: false, color: [140, 200, 230], desc: 'Shoot the ducks before they fly away. Mind the dog!',    game: 'DuckHuntGame' },
+  { id: 'punchout',   icon: '🥊', name: 'PUNCH-OUT!!',     genre: 'Sports / Boxing',         twoP: false, color: [240, 160, 60],  desc: 'Dodge, block and counter-punch your way to the title.',  game: 'BoxingGame' },
+  { id: 'tmnt',       icon: '🐢', name: 'TMNT',            genre: 'Beat-em-up / Co-op',      twoP: true,  color: [80, 200, 90],   desc: 'Fight the Foot Clan through the city streets.',          game: 'TMNTGame' },
+  { id: 'ninjagaiden',icon: '🥷', name: 'NINJA GAIDEN',    genre: 'Action / Platformer',     twoP: false, color: [120, 120, 200], desc: 'Slice through ninjas on a perilous sky-bound journey.',  game: 'NinjaGaidenGame' },
+  { id: 'doubledragon',icon:'🐉', name: 'DOUBLE DRAGON',   genre: 'Beat-em-up / Co-op',      twoP: true,  color: [220, 80, 80],   desc: 'Punch and kick through gang waves to save Marian.',      game: 'DoubleDragonGame' },
+  { id: 'mortalkombat',icon:'🥋', name: 'MORTAL KOMBAT',   genre: 'Fighting / Versus',       twoP: true,  color: [200, 60, 50],   desc: 'Test your might in a brutal one-on-one tournament.',     game: 'MortalKombatGame' },
+  { id: 'streetfighter',icon:'👊',name: 'STREET FIGHTER',  genre: 'Fighting / Versus',       twoP: true,  color: [240, 200, 60],  desc: 'Hadoken! World warriors clash for the championship.',    game: 'StreetFighterGame' },
+  { id: 'roadfighter',icon: '🚗', name: 'ROAD FIGHTER',    genre: 'Racing / Arcade',         twoP: false, color: [230, 80, 80],   desc: 'Weave through traffic at insane speeds. Don\'t crash!',  game: 'RoadFighterGame' },
+  { id: '1942',       icon: '✈️', name: '1942',            genre: 'Shooter / Vertical',      twoP: false, color: [90, 140, 200],  desc: 'Fly the raiden over the pacific and dodge bullet walls.', game: 'Game1942' },
+  { id: 'galaga',     icon: '🚀', name: 'GALAGA',          genre: 'Shooter / Space',         twoP: false, color: [80, 120, 230],  desc: 'Destroy the alien fleet in perfect formation attacks.',  game: 'GalagaGame' },
+  { id: 'invaders',   icon: '👾', name: 'SPACE INVADERS',  genre: 'Shooter / Classic',       twoP: false, color: [150, 230, 150], desc: 'Hold the line against descending alien columns.',        game: 'InvadersGame' },
+  { id: 'tetris',     icon: '🧱', name: 'TETRIS',          genre: 'Puzzle / Classic',        twoP: false, color: [90, 160, 230],  desc: 'Stack the falling tetrominoes and clear the lines.',     game: 'TetrisGame' },
+  { id: 'snake',      icon: '🐍', name: 'SNAKE',           genre: 'Puzzle / Classic',        twoP: false, color: [110, 220, 110], desc: 'Eat, grow and never bite your own tail.',                game: 'SnakeGame' },
+  { id: 'pong',       icon: '🏓', name: 'PONG',            genre: 'Sports / Classic',        twoP: true,  color: [220, 220, 230], desc: 'The original duel. First to score 7 points wins.',       game: 'PongGame' },
+  { id: 'arkanoid',   icon: '🧱', name: 'ARKANOID',        genre: 'Arcade / Breakout',       twoP: false, color: [120, 180, 240], desc: 'Bounce the ball, smash every brick on the screen.',      game: 'ArkanoidGame' },
+  { id: 'bomberman',  icon: '💣', name: 'BOMBERMAN',       genre: 'Action / Maze',           twoP: true,  color: [240, 170, 60],  desc: 'Blast blocks and rivals in a maze of explosions.',       game: 'BombermanGame' },
+  { id: 'worldcup',   icon: '⚽', name: 'NINTENDO WORLD CUP', genre: 'Sports / Soccer',      twoP: true,  color: [80, 200, 110],  desc: 'Dribble, pass and score in arcade soccer glory.',        game: 'SoccerGame' },
+  { id: 'excitebike', icon: '🏎️', name: 'EXCITEBIKE',      genre: 'Racing / Motocross',      twoP: false, color: [220, 140, 50],  desc: 'Race the motocross track, keep your engine cool.',       game: 'ExcitebikeGame' },
+  { id: 'sonic',      icon: '🦔', name: 'SONIC',           genre: 'Platformer / Speed',      twoP: false, color: [60, 140, 240],  desc: 'Gotta go fast! Rings, loops and Dr. Eggman.',            game: 'SonicGame' },
+  { id: 'adventure',  icon: '👑', name: 'ADVENTURE ISLAND', genre: 'Platformer / Survival',  twoP: false, color: [240, 150, 70],  desc: 'Hurry! Throw stones and eat fruit before hunger wins.',  game: 'AdventureIslandGame' },
+  { id: 'zelda',      icon: '🏹', name: 'THE LEGEND OF ZELDA', genre: 'Adventure / RPG',     twoP: false, color: [220, 180, 80],  desc: 'Explore rooms, slash octoroks, find the triforce.',      game: 'ZeldaGame' },
+  { id: 'kirby',      icon: '🧙', name: 'KIRBY',           genre: 'Platformer / Cute',       twoP: false, color: [250, 150, 190], desc: 'Inhale enemies, float through Dream Land.',              game: 'KirbyGame' },
+  { id: 'felix',      icon: '🐱', name: 'FELIX THE CAT',   genre: 'Platformer / Cartoon',    twoP: false, color: [240, 200, 80],  desc: 'Hop through wacky cartoon levels with magic bags.',      game: 'FelixGame' },
+  { id: 'bugsbunny',  icon: '🐰', name: 'BUGS BUNNY',      genre: 'Platformer / Cartoon',    twoP: false, color: [170, 180, 200], desc: 'Outsmart foes with carrots and crazy cartoon hops.',     game: 'BugsBunnyGame' },
+  { id: 'chipndale',  icon: '🦆', name: "CHIP 'N DALE",    genre: 'Platformer / Co-op',      twoP: true,  color: [190, 140, 80],  desc: 'Throw acorns and rescue gadgets with the Rescue Rangers.', game: 'ChipDaleGame' },
+  { id: 'tinytoon',   icon: '🐿️', name: 'TINY TOON',       genre: 'Platformer / Cartoon',    twoP: false, color: [240, 170, 200], desc: 'Bounce through Acme Acres with Buster and friends.',     game: 'TinyToonGame' },
+  { id: 'contra',     icon: '🐉', name: 'CONTRA',          genre: 'Run & Gun / Co-op',       twoP: true,  color: [150, 220, 90],  desc: 'Jungle warfare. Two commandos, one mission: survive.',   game: 'ContraGame' },
+  { id: 'gunsmoke',   icon: '🔫', name: 'GUN.SMOKE',       genre: 'Shooter / Western',       twoP: false, color: [200, 150, 90],  desc: 'Six-shooters blazing across the wild west.',             game: 'GunSmokeGame' },
+  { id: 'choplifter', icon: '🚁', name: 'CHOPLIFTER',      genre: 'Action / Helicopter',     twoP: false, color: [110, 200, 120], desc: 'Fly the chopper, dodge jets, rescue the hostages.',      game: 'ChoplifterGame' },
+  { id: 'pacman',     icon: '👻', name: 'PAC-MAN',         genre: 'Arcade / Maze',           twoP: false, color: [250, 220, 80],  desc: 'Munch every pellet and outsmart the four ghosts.',       game: 'PacManGame' },
+  { id: 'castlevania',icon: '🧟', name: 'CASTLEVANIA',     genre: 'Action / Horror',         twoP: false, color: [140, 90, 170],  desc: 'Whip skeletons in the cursed castle of Dracula.',        game: 'CastlevaniaGame' },
+  { id: 'shadowwarriors',icon:'🥷',name:'SHADOW WARRIORS', genre: 'Action / Ninja',          twoP: false, color: [100, 110, 150], desc: 'Ninja warriors clash in the shadow of the shogun.',      game: 'ShadowWarriorsGame' },
+  { id: 'pop',        icon: '🏰', name: 'PRINCE OF PERSIA', genre: 'Adventure / Platformer', twoP: false, color: [200, 170, 110], desc: 'Run the palace dungeons, dodge blades, beat the clock.', game: 'PrinceOfPersiaGame' },
+  { id: 'jurassic',   icon: '🦖', name: 'JURASSIC PARK',   genre: 'Action / Adventure',      twoP: false, color: [110, 190, 100], desc: 'Escape the park while raptors hunt you in the jungle.',  game: 'JurassicGame' },
+  { id: 'ducktales',  icon: '🐦', name: 'DUCKTALES',       genre: 'Platformer / Adventure',  twoP: false, color: [250, 210, 80],  desc: 'Pogo-jump around the world hunting lost treasures.',     game: 'DuckTalesGame' },
+  { id: 'f1race',     icon: '🏁', name: 'F-1 RACE',        genre: 'Racing / Formula',        twoP: false, color: [230, 80, 90],   desc: 'Slipstream past rivals at 300 km/h. Watch the kerbs!',   game: 'F1RaceGame' },
+  { id: 'tmnt2',      icon: '⚔️', name: 'TMNT TOURNAMENT', genre: 'Fighting / Versus',       twoP: true,  color: [90, 200, 100],  desc: 'Turtle power! Tournament fights on the mean streets.',   game: 'TMNT2Game' }
+];
+
+window.GAMES = GAMES;
