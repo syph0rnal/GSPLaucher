@@ -118,9 +118,9 @@ class Game {
     if (this.is2P) txt(ctx, `P2 ${padScore(this.scores[1])}`, this.W - 14, 17, { size: 10, color: '#ff8d99', align: 'right' });
     else txt(ctx, `HI ${padScore(this.hiScore || 0)}`, this.W - 14, 17, { size: 10, color: '#8fa8c8', align: 'right' });
     if (this.round > 1 || this.showRound) txt(ctx, `ROUND ${this.round}`, this.W / 2, 17, { size: 10, color: '#e8f4ff', align: 'center' });
-    // lives hearts
-    for (let i = 0; i < Math.max(0, this.lives[0]); i++) { ctx.fillStyle = '#7fc4ff'; ctx.fillText('❤', 150 + i * 18, 24); }
-    if (this.is2P) for (let i = 0; i < Math.max(0, this.lives[1]); i++) { ctx.fillStyle = '#ff8d99'; ctx.fillText('❤', this.W - 200 + i * 18, 24); }
+    // Векторные индикаторы жизней.
+    for (let i = 0; i < Math.max(0, this.lives[0]); i++) drawHudHeart(ctx, 150 + i * 18, 18, '#7fc4ff', 9);
+    if (this.is2P) for (let i = 0; i < Math.max(0, this.lives[1]); i++) drawHudHeart(ctx, this.W - 200 + i * 18, 18, '#ff8d99', 9);
     ctx.restore();
   }
 
