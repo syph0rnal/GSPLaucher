@@ -221,8 +221,8 @@ class GameHost {
       if (!game || typeof game.init !== 'function' || typeof game.update !== 'function' || typeof game.render !== 'function') {
         throw new Error('The selected game has an invalid implementation.');
       }
-      game.init();
       this.game = game;
+      game.init();
       this.errorMessage = '';
     } catch (error) {
       console.error('Unable to start game:', error);
