@@ -104,7 +104,7 @@ class Game {
     this.result = result || { type: 'gameover' };
     this.host.gameOver(this.result);
   }
-  win1P(title) { this.end({ type: 'victory', title: title || 'VICTORY!' }); }
+  win1P(title) { this.end({ type: 'victory', title: title || 'ПОБЕДА!' }); }
   lose1P()    { this.end({ type: 'gameover' }); }
   wins(p)     { this.end({ type: p === 0 ? 'p1wins' : 'p2wins' }); }
   drawEnd()   { this.end({ type: 'draw' }); }
@@ -235,16 +235,16 @@ class GameHost {
   _renderError(ctx) {
     ctx.fillStyle = '#050a16';
     ctx.fillRect(0, 0, this.W, this.H);
-    txt(ctx, 'GAME COULD NOT START', this.W / 2, 190, {
+    txt(ctx, 'НЕ УДАЛОСЬ ЗАПУСТИТЬ ИГРУ', this.W / 2, 190, {
       size: 17, color: '#ff9aa5', align: 'center', glow: 12
     });
-    txt(ctx, 'The game files may be missing or incompatible.', this.W / 2, 245, {
+    txt(ctx, 'Файлы игры отсутствуют или несовместимы.', this.W / 2, 245, {
       size: 9, color: '#c5d7eb', px: false, align: 'center'
     });
     txt(ctx, String(this.errorMessage || '').slice(0, 100), this.W / 2, 282, {
       size: 8, color: '#8fa8c8', px: false, align: 'center'
     });
-    txt(ctx, 'ESC — RETURN TO MENU', this.W / 2, 390, {
+    txt(ctx, 'ESC — ВЕРНУТЬСЯ В МЕНЮ', this.W / 2, 390, {
       size: 10, color: '#9fd4ff', align: 'center'
     });
   }
@@ -284,8 +284,8 @@ class GameHost {
     if (this.state === 'title') this._renderTitle(ctx, dt);
     else if (this.state === 'ready') this._renderReady(ctx, dt);
     else if (this.state === 'play') {
-      try { this.game.update(dt); } catch (e) { console.error('game update error', e); }
-      try { this.game.render(ctx); } catch (e) { console.error('game render error', e); }
+      try { this.game.update(dt); } catch (e) { console.error('game update error', e); this.errorMessage = e?.message || 'Ошибка обновления игры'; this.state = 'error'; }
+      try { this.game.render(ctx); } catch (e) { console.error('game render error', e); this.errorMessage = e?.message || 'Ошибка отрисовки игры'; this.state = 'error'; }
       try { this.game.drawHud(ctx); } catch (e) { /* hud optional */ }
       this._renderPauseHint(ctx);
     } else if (this.state === 'pause') {
@@ -330,18 +330,14 @@ class GameHost {
     ctx.restore();
 
     // icon
-    ctx.font = '110px serif';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(90,190,255,.9)'; ctx.shadowBlur = 40;
-    ctx.fillText(g.icon, this.W / 2, 200);
-    ctx.shadowBlur = 0;
+    drawGameIcon(ctx, g.icon, this.W / 2, 200, 110);
 
     txt(ctx, g.name, this.W / 2, 300, { size: 26, color: '#ffffff', align: 'center', glow: 18, glowColor: 'rgba(90,190,255,.9)' });
     txt(ctx, g.genre.toUpperCase(), this.W / 2, 336, { size: 10, color: '#6fb6e8', align: 'center' });
 
     const blink = Math.sin(now2()) > 0;
-    if (blink) txt(ctx, 'PRESS ENTER TO START', this.W / 2, 410, { size: 13, color: '#eaf6ff', align: 'center', glow: 12 });
-    txt(ctx, this.mode === 2 ? 'MODE: 👥 2 PLAYERS' : 'MODE: 👤 1 PLAYER', this.W / 2, 452, { size: 9, color: this.mode === 2 ? '#ff8d99' : '#7fc4ff', align: 'center' });
+    if (blink) txt(ctx, 'НАЖМИТЕ ENTER ДЛЯ СТАРТА', this.W / 2, 410, { size: 13, color: '#eaf6ff', align: 'center', glow: 12 });
+    txt(ctx, this.mode === 2 ? 'РЕЖИМ: 2 ИГРОКА' : 'РЕЖИМ: 1 ИГРОК', this.W / 2, 452, { size: 9, color: this.mode === 2 ? '#ff8d99' : '#7fc4ff', align: 'center' });
     const hint = (this.game && this.game.controlsHint) ? this.game.controlsHint() : 'P PAUSE · ESC MENU';
     txt(ctx, hint, this.W / 2, 486, { size: 8, color: '#5c7a9c', align: 'center' });
   }
@@ -353,13 +349,13 @@ class GameHost {
     ctx.fillStyle = grad; ctx.fillRect(0, 0, this.W, this.H);
     this._renderStars(ctx, dt);
 
-    txt(ctx, '2 PLAYERS', this.W / 2, 90, { size: 30, color: '#ffffff', align: 'center', glow: 24 });
-    txt(ctx, g.icon + '  ' + g.name, this.W / 2, 150, { size: 14, color: '#9fd4ff', align: 'center' });
+    txt(ctx, '2 ИГРОКА', this.W / 2, 90, { size: 30, color: '#ffffff', align: 'center', glow: 24 });
+    txt(ctx, g.name, this.W / 2, 150, { size: 14, color: '#9fd4ff', align: 'center' });
 
     // P1 card
-    this._playerCard(ctx, this.W / 2 - 260, 210, 'PLAYER 1', '#3aa0ff', ['W A S D', 'SPACE — ACTION', 'L-SHIFT — SPECIAL']);
+    this._playerCard(ctx, this.W / 2 - 260, 210, 'ИГРОК 1', '#3aa0ff', ['W A S D', 'ПРОБЕЛ — ДЕЙСТВИЕ', 'ЛЕВЫЙ SHIFT — ОСОБОЕ']);
     // P2 card
-    this._playerCard(ctx, this.W / 2 + 40, 210, 'PLAYER 2', '#ff4d5e', ['↑ ↓ ← →', 'ENTER — ACTION', 'R-SHIFT — SPECIAL']);
+    this._playerCard(ctx, this.W / 2 + 40, 210, 'ИГРОК 2', '#ff4d5e', ['↑ ↓ ← →', 'ENTER — ДЕЙСТВИЕ', 'ПРАВЫЙ SHIFT — ОСОБОЕ']);
 
     const blink = Math.sin(now2()) > 0;
     if (blink) txt(ctx, 'READY?  PRESS ENTER TO START', this.W / 2, 470, { size: 13, color: '#eaf6ff', align: 'center', glow: 14 });
@@ -388,9 +384,9 @@ class GameHost {
     rr(ctx, this.W / 2 - 220, this.H / 2 - 90, 440, 180, 18);
     ctx.fillStyle = 'rgba(120,190,255,.07)'; ctx.fill();
     ctx.strokeStyle = 'rgba(140,210,255,.4)'; ctx.lineWidth = 2; ctx.stroke();
-    txt(ctx, '⏸ PAUSED', this.W / 2, this.H / 2 - 34, { size: 24, color: '#fff', align: 'center', glow: 16 });
-    txt(ctx, 'P — RESUME', this.W / 2, this.H / 2 + 14, { size: 11, color: '#9fd4ff', align: 'center' });
-    txt(ctx, 'ESC — BACK TO MENU', this.W / 2, this.H / 2 + 44, { size: 11, color: '#9fd4ff', align: 'center' });
+    txt(ctx, 'ПАУЗА', this.W / 2, this.H / 2 - 34, { size: 24, color: '#fff', align: 'center', glow: 16 });
+    txt(ctx, 'P — ПРОДОЛЖИТЬ', this.W / 2, this.H / 2 + 14, { size: 11, color: '#9fd4ff', align: 'center' });
+    txt(ctx, 'ESC — В МЕНЮ', this.W / 2, this.H / 2 + 44, { size: 11, color: '#9fd4ff', align: 'center' });
     ctx.restore();
   }
 
@@ -399,27 +395,27 @@ class GameHost {
     ctx.save();
     ctx.fillStyle = 'rgba(2,6,16,.78)'; ctx.fillRect(0, 0, this.W, this.H);
 
-    let title = 'GAME OVER', color = '#ff6b7a', icon = '💀';
-    if (r.type === 'victory') { title = r.title || 'VICTORY!'; color = '#7dffb0'; icon = '🏆'; }
-    if (r.type === 'p1wins') { title = 'PLAYER 1 WINS!'; color = '#5db8ff'; icon = '🔵'; }
-    if (r.type === 'p2wins') { title = 'PLAYER 2 WINS!'; color = '#ff6b7a'; icon = '🔴'; }
-    if (r.type === 'draw') { title = 'DRAW!'; color = '#ffd76b'; icon = '🤝'; }
+    let title = 'ИГРА ОКОНЧЕНА', color = '#ff6b7a';
+    if (r.type === 'victory') { title = r.title || 'ПОБЕДА!'; color = '#7dffb0'; }
+    if (r.type === 'p1wins') { title = 'ПОБЕДИЛ ИГРОК 1!'; color = '#5db8ff'; }
+    if (r.type === 'p2wins') { title = 'ПОБЕДИЛ ИГРОК 2!'; color = '#ff6b7a'; }
+    if (r.type === 'draw') { title = 'НИЧЬЯ!'; color = '#ffd76b'; }
 
-    txt(ctx, icon + ' ' + title, this.W / 2, 170, { size: 30, color, align: 'center', glow: 26, glowColor: color });
+    txt(ctx, title, this.W / 2, 170, { size: 30, color, align: 'center', glow: 26, glowColor: color });
 
     // scores
     const sc = this.game.scores || [0, 0];
     txt(ctx, `PLAYER 1 — ${padScore(sc[0])}`, this.W / 2, 240, { size: 12, color: '#7fc4ff', align: 'center' });
     if (this.mode === 2) txt(ctx, `PLAYER 2 — ${padScore(sc[1])}`, this.W / 2, 272, { size: 12, color: '#ff8d99', align: 'center' });
 
-    const opts = ['▶ PLAY AGAIN', '☰ BACK TO MENU'];
+    const opts = ['ИГРАТЬ СНОВА', 'ВЕРНУТЬСЯ В МЕНЮ'];
     opts.forEach((o, i) => {
       const sel = this._overSel === i;
       txt(ctx, (sel ? '▸ ' : '') + o, this.W / 2, 350 + i * 44, {
         size: 14, color: sel ? '#ffffff' : '#6f93b8', align: 'center', glow: sel ? 14 : 0
       });
     });
-    txt(ctx, '↑ ↓ SELECT · ENTER CONFIRM', this.W / 2, 470, { size: 8, color: '#5c7a9c', align: 'center' });
+    txt(ctx, '↑ ↓ ВЫБОР · ENTER ПОДТВЕРДИТЬ', this.W / 2, 470, { size: 8, color: '#5c7a9c', align: 'center' });
     ctx.restore();
   }
 }
