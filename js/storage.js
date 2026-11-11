@@ -22,7 +22,8 @@ const Store = {
     return {
       volume: Number.isFinite(volume) ? Math.min(1, Math.max(0, volume)) : 0.7,
       music: typeof source.music === 'boolean' ? source.music : true,
-      sfx: typeof source.sfx === 'boolean' ? source.sfx : true
+      sfx: typeof source.sfx === 'boolean' ? source.sfx : true,
+      language: source.language === 'en' ? 'en' : 'ru'
     };
   },
 
@@ -31,7 +32,8 @@ const Store = {
     return this.set('settings', {
       volume: Number.isFinite(volume) ? Math.min(1, Math.max(0, volume)) : 0.7,
       music: settings?.music !== false,
-      sfx: settings?.sfx !== false
+      sfx: settings?.sfx !== false,
+      language: settings?.language === 'en' ? 'en' : 'ru'
     });
   },
 
