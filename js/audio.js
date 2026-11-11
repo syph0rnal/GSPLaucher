@@ -80,17 +80,18 @@ class AudioEngine {
   }
 
   /* ---- UI sounds ---- */
-  navigate() { this.tone(660, 0.07, { type: 'square', vol: 0.12 }); this.tone(990, 0.05, { vol: 0.06, delay: 0.03 }); }
-  select()   { this.tone(523, 0.09, { vol: 0.14 }); this.tone(784, 0.12, { vol: 0.14, delay: 0.07 }); }
-  back()     { this.tone(440, 0.08, { vol: 0.12 }); this.tone(294, 0.12, { vol: 0.12, delay: 0.06 }); }
+  navigate() { this.tone(740, 0.055, { type: 'sine', vol: 0.09, slide: 90 }); this.tone(1110, 0.045, { type: 'triangle', vol: 0.035, delay: 0.018 }); }
+  select()   { this.tone(660, 0.07, { type:'sine', vol:0.13 }); this.tone(990, 0.12, { type:'sine', vol:0.10, delay:0.055 }); }
+  back()     { this.tone(660, 0.06, { type:'sine', vol:0.09, slide:-180 }); this.tone(440, 0.11, { type:'triangle', vol:0.08, delay:0.045 }); }
   start() {
     [392, 523, 659, 784].forEach((f, i) => this.tone(f, 0.16, { vol: 0.16, delay: i * 0.08 }));
     this.tone(1046, 0.35, { vol: 0.12, delay: 0.34, type: 'triangle' });
   }
   boot() {
-    this.tone(110, 0.9, { type: 'sawtooth', vol: 0.1, slide: 220 });
-    this.tone(440, 0.5, { type: 'triangle', vol: 0.08, delay: 0.35, slide: 440 });
-    [523, 659, 784, 1046].forEach((f, i) => this.tone(f, 0.4, { type: 'triangle', vol: 0.1, delay: 0.7 + i * 0.12 }));
+    this.noise(1.35, { vol:0.035, freq:420, q:0.6 });
+    [110,164.8,220,329.6,440,554.4,659.3,880].forEach((f,i)=>this.tone(f,1.55,{type:'sine',vol:0.045,attack:0.32,delay:i*0.095}));
+    this.tone(110,1.2,{type:'triangle',vol:0.06,slide:55,attack:0.4,delay:0.1});
+    this.tone(880,0.9,{type:'sine',vol:0.035,attack:0.3,delay:0.9});
   }
   pause()  { this.tone(587, 0.1, { vol: 0.13 }); this.tone(440, 0.14, { vol: 0.13, delay: 0.09 }); }
   win()    { [523, 659, 784, 1046, 1318].forEach((f, i) => this.tone(f, 0.22, { type: 'triangle', vol: 0.15, delay: i * 0.12 })); }
