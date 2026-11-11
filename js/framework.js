@@ -168,6 +168,8 @@ class GameHost {
         this.exit();
       } else if (this.state === 'pause' && (e.code === 'KeyP' || e.code === 'Escape')) {
         if (e.code === 'KeyP') this.togglePause(); else this.exit();
+      } else if (this.state === 'error' && e.code === 'Escape') {
+        this.exit();
       } else if (this.state === 'over') {
         if (e.code === 'ArrowUp' || e.code === 'KeyW') { this._overSel = (this._overSel + 1) % 2; this.audio.navigate(); }
         else if (e.code === 'ArrowDown' || e.code === 'KeyS') { this._overSel = (this._overSel + 1) % 2; this.audio.navigate(); }
@@ -211,8 +213,40 @@ class GameHost {
   }
 
   _spawnGame() {
-    this.game = new this.gameDef.gameClass(this);
-    try { this.game.init(); } catch (e) { console.error('game init error', e); }
+    try {
+      if (!this.gameDef || typeof this.gameDef.gameClass !== 'function') {
+        throw new Error('This game is not available: its game class was not loaded.');
+      }
+      const game = new this.gameDef.gameClass(this);
+      if (!game || typeof game.init !== 'function' || typeof game.update !== 'function' || typeof game.render !== 'function') {
+        throw new Error('The selected game has an invalid implementation.');
+      }
+      game.init();
+      this.game = game;
+      this.errorMessage = '';
+    } catch (error) {
+      console.error('Unable to start game:', error);
+      this.game = null;
+      this.errorMessage = error && error.message ? error.message : 'Unknown game error';
+      this.state = 'error';
+    }
+  }
+
+  _renderError(ctx) {
+    ctx.fillStyle = '#050a16';
+    ctx.fillRect(0, 0, this.W, this.H);
+    txt(ctx, 'GAME COULD NOT START', this.W / 2, 190, {
+      size: 17, color: '#ff9aa5', align: 'center', glow: 12
+    });
+    txt(ctx, 'The game files may be missing or incompatible.', this.W / 2, 245, {
+      size: 9, color: '#c5d7eb', px: false, align: 'center'
+    });
+    txt(ctx, String(this.errorMessage || '').slice(0, 100), this.W / 2, 282, {
+      size: 8, color: '#8fa8c8', px: false, align: 'center'
+    });
+    txt(ctx, 'ESC — RETURN TO MENU', this.W / 2, 390, {
+      size: 10, color: '#9fd4ff', align: 'center'
+    });
   }
 
   _confirmTitle() {
@@ -262,6 +296,8 @@ class GameHost {
       try { this.game.render(ctx); } catch (e) {}
       try { this.game.drawHud(ctx); } catch (e) {}
       this._renderOver(ctx);
+    } else if (this.state === 'error') {
+      this._renderError(ctx);
     }
   }
 
