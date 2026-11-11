@@ -278,3 +278,50 @@ button { font: inherit; }
   .cat-rail { gap: 8px; }
   .cat-item .cat-ico { font-size: 22px; }
 }
+
+
+/* ===== Animated PS3-style flowing XMB waves ===== */
+#menuScreen .menu-bg {
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 18% 68%, rgba(73,153,226,.32), transparent 43%),
+    radial-gradient(ellipse at 78% 22%, rgba(42,111,184,.28), transparent 48%),
+    linear-gradient(120deg, #06152d 0%, #0b2b50 42%, #123c68 68%, #06172e 100%);
+}
+#menuScreen .menu-bg::before {
+  inset: -38% -22%;
+  opacity: .82;
+  filter: blur(1px);
+  background:
+    radial-gradient(ellipse 58% 28% at 18% 74%, transparent 56%, rgba(150,213,255,.20) 57%, rgba(90,169,230,.08) 59%, transparent 66%),
+    radial-gradient(ellipse 62% 34% at 72% 30%, transparent 56%, rgba(140,207,255,.17) 57%, rgba(88,164,224,.07) 59%, transparent 67%),
+    radial-gradient(ellipse 48% 25% at 48% 58%, transparent 55%, rgba(196,231,255,.12) 56%, transparent 64%),
+    linear-gradient(155deg, transparent 38%, rgba(115,190,245,.07) 48%, transparent 59%);
+  animation: ps3WaveDrift 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+#menuScreen .menu-bg::after {
+  inset: -55% -30%;
+  opacity: .7;
+  background:
+    radial-gradient(ellipse 72% 38% at 22% 92%, transparent 57%, rgba(128,196,244,.16) 58%, rgba(128,196,244,.035) 61%, transparent 69%),
+    radial-gradient(ellipse 66% 34% at 82% 8%, transparent 56%, rgba(177,221,255,.14) 57%, transparent 65%),
+    radial-gradient(ellipse 54% 30% at 56% 54%, transparent 58%, rgba(101,178,235,.11) 59%, transparent 67%),
+    linear-gradient(180deg, rgba(2,12,28,.08), transparent 48%, rgba(1,10,24,.25));
+  animation: ps3WaveFloat 34s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes ps3WaveDrift {
+  0% { transform: translate3d(-3%, 1.5%, 0) rotate(-4deg) scale(1); }
+  50% { transform: translate3d(1%, -1%, 0) rotate(0deg) scale(1.035); }
+  100% { transform: translate3d(3%, -2.5%, 0) rotate(4deg) scale(1.07); }
+}
+@keyframes ps3WaveFloat {
+  0% { transform: translate3d(2%, -2%, 0) rotate(3deg) scale(1.04); }
+  100% { transform: translate3d(-3%, 2%, 0) rotate(-3deg) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #menuScreen .menu-bg::before,
+  #menuScreen .menu-bg::after { animation: none; }
+}
