@@ -134,13 +134,12 @@ class Menu {
       const sel = off === 0;
       el.classList.toggle('sel', sel);
       el.classList.toggle('dim', !sel && abs < 4);
-      if (abs > 4) { el.style.opacity = '0'; el.style.transform = `translate(${Math.sign(off) * 620}px,-50%) scale(.5)`; el.style.zIndex = 0; return; }
+      if (abs > 4) { el.style.opacity = '0'; el.style.transform = `translateY(calc(-50% + ${off * 88}px)) scale(.96)`; el.style.zIndex = 0; return; }
       el.style.opacity = abs > 3 ? '0' : sel ? '1' : String(0.85 - abs * 0.18);
       el.style.zIndex = String(100 - abs);
-      const x = off * 165;
-      const scale = sel ? 1.35 : Math.max(0.55, 1 - abs * 0.14);
-      const y = sel ? -50 : -50 + Math.min(abs * 9, 26);
-      el.style.transform = `translate(calc(-50% + ${x}px), ${y}%) scale(${scale}) rotateY(${off * -12}deg)`;
+      const y = off * 88;
+      const scale = sel ? 1 : 0.96;
+      el.style.transform = `translateY(calc(-50% + ${y}px)) scale(${scale})`;
     });
     if (list.length) this._setInfo(list[this.idx]);
     this.el.hintCount.textContent = list.length ? `${this.idx + 1} / ${list.length}  ·  ${CATS[this.cat].name}` : CATS[this.cat].name;
@@ -251,6 +250,12 @@ class Menu {
   }
 
   /* ---------- navigation ---------- */
+  changeCategory(dir) {
+    const next = (this.cat + dir + CATS.length) % CATS.length;
+    this._applyCat(next);
+    this.app.audio.navigate();
+  }
+
   move(dir) {
     if (this.cat === 3) {
       // settings navigation
