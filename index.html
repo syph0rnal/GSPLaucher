@@ -1,138 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#050b18">
-<meta name="description" content="GSPLaucher — браузерная игровая консоль с меню в стиле PlayStation 3 и подборкой аркадных игр.">
-<meta name="color-scheme" content="dark">
-<title>GSPLaucher — игровая консоль</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#061a36">
+<meta name="description" content="GSPLaucher — игровая консоль в стиле PlayStation 3.">
+<title>GSPLaucher — PlayStation 3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/quality.css">
 </head>
 <body>
-
-<!-- ============ BOOT / POWER ON ============ -->
-<div id="bootScreen" class="screen active">
-  <div class="boot-inner">
-    <div class="power-ring">
-      <div class="power-core"></div>
-      <div class="power-icon">⏻</div>
-    </div>
-    <div class="boot-logo">PlayStation<span> 3</span></div>
-    <div class="boot-sub">ИГРОВАЯ КОНСОЛЬ</div>
-    <div class="boot-press" id="bootPress">НАЖМИТЕ ЛЮБУЮ КЛАВИШУ ДЛЯ ЗАПУСКА</div>
-  </div>
-  <div class="scanlines"></div>
+<div id="boot" class="screen boot">
+  <div class="boot-mark"><span class="ps-symbol">✦</span><div><strong>PlayStation<span> 3</span></strong><small>GSP CONSOLE SYSTEM</small></div></div>
+  <div class="boot-bottom">НАЖМИТЕ ЛЮБУЮ КЛАВИШУ ДЛЯ ВКЛЮЧЕНИЯ</div>
+  <div class="boot-orbit"></div>
 </div>
-
-<!-- ============ ЗАГРУЗКА КОНСОЛИ ============ -->
-<div id="loadingScreen" class="screen">
-  <div class="load-inner">
-    <div class="load-logo">PlayStation<span> 3</span></div>
-    <div class="load-ring"><div class="load-arc"></div><div class="load-dot"></div></div>
-    <div class="load-text">ЗАГРУЗКА<span class="dots">...</span></div>
-    <div class="load-bar"><div class="load-fill" id="loadFill"></div></div>
-    <div class="load-pct" id="loadPct">0%</div>
-  </div>
-  <canvas id="loadParticles"></canvas>
-  <div class="scanlines"></div>
+<div id="home" class="screen home hidden">
+  <div class="wallpaper"><div class="wave wave-a"></div><div class="wave wave-b"></div><div class="wave wave-c"></div><div class="stars"></div></div>
+  <header class="topbar"><div class="system-brand">GS<span>P</span> · PLAYSTATION 3</div><div class="system-status"><span id="statusLabel">СИСТЕМА ГОТОВА</span><span id="clock">00:00</span></div></header>
+  <nav id="categories" class="categories" aria-label="Категории"></nav>
+  <main class="xmb-content"><section class="game-list" id="gameList"></section><aside class="details" id="details"><div class="cover" id="cover"></div><div class="detail-copy"><div class="detail-kicker" id="detailKicker">КОЛЛЕКЦИЯ</div><h1 id="detailName">Игры</h1><p id="detailDescription">Выберите игру.</p><div class="detail-meta" id="detailMeta"></div><button id="launch" class="launch">ЗАПУСТИТЬ <span>↗</span></button></div></aside></main>
+  <footer class="bottom-bar"><div><span class="keycap">←</span><span class="keycap">→</span> КАТЕГОРИЯ <span class="keycap">↑</span><span class="keycap">↓</span> ВЫБОР</div><a href="https://syph0rnal.github.io/GSPLaucher/" target="_blank" rel="noopener">syph0rnal.github.io/GSPLaucher</a><div><span class="keycap">ENTER</span> ОТКРЫТЬ <span class="keycap">ESC</span> НАЗАД</div></footer>
 </div>
-
-<!-- ============ ГЛАВНОЕ МЕНЮ (СТИЛЬ XMB) ============ -->
-<div id="menuScreen" class="screen">
-  <div class="menu-bg">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-    <div class="bg-grid"></div>
-    <div class="bg-vignette"></div>
-  </div>
-
-  <header class="menu-top">
-    <div class="console-brand">PlayStation<span> 3</span></div>
-    <div class="menu-title-wrap">
-      <div class="menu-title" id="menuTitle">ИГРЫ</div>
-      <div class="menu-subtitle" id="menuSubtitle">20 ИЗБРАННЫХ ИГР</div>
-    </div>
-    <div class="clock glass-chip" id="menuClock">00:00</div>
-  </header>
-
-  <aside class="cat-rail" id="catRail"></aside>
-
-  <main class="carousel-zone">
-    <div class="carousel" id="carousel"></div>
-    <div class="settings-panel glass hidden" id="settingsPanel"></div>
-  </main>
-
-  <section class="info-panel glass" id="infoPanel">
-    <div class="info-icon" id="infoIcon"></div>
-    <div class="info-main">
-      <div class="info-name-row">
-        <span class="info-name" id="infoName">ИГРЫ</span>
-        <span class="info-badge" id="infoBadge">2 ИГРОКА</span>
-      </div>
-      <div class="info-genre" id="infoGenre">АРКАДА</div>
-      <div class="info-desc" id="infoDesc">Выберите игру и нажмите Enter для запуска.</div>
-    </div>
-    <button class="play-btn" id="playBtn">ЗАПУСТИТЬ</button>
-  </section>
-
-  <footer class="hint-bar">
-    <span class="hint-count" id="hintCount">20 ИГР</span><a class="project-link" href="https://syph0rnal.github.io/GSPLaucher/" target="_blank" rel="noopener">syph0rnal.github.io/GSPLaucher</a>
-    <span class="hint-keys">
-      <b>← →</b> ВЫБРАТЬ&nbsp;&nbsp;<b>ENTER</b> ЗАПУСК&nbsp;&nbsp;<b>ESC</b> НАЗАД
-    </span>
-  </footer>
+<div id="game" class="screen game-screen hidden">
+  <header class="game-top"><button id="back" class="ghost-button">← В МЕНЮ</button><div><strong id="gameTitle">ИГРА</strong><small id="gameSubtitle">GSPLAUCHER ARCADE</small></div><div class="game-actions"><span id="score">СЧЁТ: 0</span><button id="pause" class="ghost-button">ПАУЗА</button></div></header>
+  <div class="stage"><canvas id="canvas" width="960" height="540" aria-label="Игровое поле"></canvas><div id="gameOverlay" class="game-overlay hidden"><div class="overlay-card"><div class="overlay-eyebrow">GSPLAUCHER SYSTEM</div><h2 id="overlayTitle">ПАУЗА</h2><p id="overlayText">Игра приостановлена</p><button id="resume" class="launch">ПРОДОЛЖИТЬ</button></div></div></div>
+  <footer class="game-footer"><span id="controlsText">УПРАВЛЕНИЕ</span><span>ESC — МЕНЮ · P — ПАУЗА</span></footer>
 </div>
-
-<!-- ============ РЕЖИМ ИГРЫ SELECT ============ -->
-<div id="modeScreen" class="screen overlay-screen">
-  <div class="mode-box glass">
-    <div class="mode-head">
-      <div class="mode-icon" id="modeIcon"></div>
-      <div class="mode-title" id="modeGameName">ИГРА</div>
-    </div>
-    <div class="mode-label">РЕЖИМ ИГРЫ</div>
-    <div class="mode-options" id="modeOptions"></div>
-    <div class="mode-hint">↑ ↓ ВЫБОР &nbsp;·&nbsp; ENTER НАЧАТЬ &nbsp;·&nbsp; ESC НАЗАД</div>
-  </div>
-</div>
-
-<!-- ============ ЗАГРУЗКА ИГРЫ ============ -->
-<div id="gameLoading" class="screen overlay-screen">
-  <div class="gl-box glass">
-    <div class="gl-icon" id="glIcon"></div>
-    <div class="gl-name" id="glName">ИГРА</div>
-    <div class="gl-bar"><div class="gl-fill" id="glFill"></div></div>
-    <div class="gl-text">ЗАГРУЗКА ИГРЫ<span class="dots">...</span></div>
-  </div>
-</div>
-
-<!-- ============ ЭКРАН ИГРЫ ============ -->
-<div id="gameScreen" class="screen">
-  <div class="game-frame">
-    <canvas id="gameCanvas" width="960" height="540"></canvas>
-    <div class="game-glow"></div>
-  </div>
-  <div class="game-back-hint">P ПАУЗА · ESC МЕНЮ</div>
-</div>
-
-<script src="js/icons.js"></script>
-<script src="js/audio.js"></script>
-<script src="js/storage.js"></script>
-<script src="js/input.js"></script>
-<script src="js/framework.js"></script>
-<script src="js/games/core.js"></script>
-<script src="js/games/registry.js"></script>
-<script src="js/games/setA.js"></script>
-<script src="js/games/setB.js"></script>
-<script src="js/games/setC.js"></script>
-<script src="js/games/setD.js"></script>
-<script src="js/menu.js"></script>
-<script src="js/main.js"></script>
-<script src="js/quality.js"></script>
-</body>
-</html>
+<script src="js/games.js"></script>
+<script src="js/app.js"></script>
+</body></html>
