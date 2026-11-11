@@ -103,3 +103,178 @@ button { font: inherit; }
     transition-duration: .01ms !important;
   }
 }
+
+
+/* ===== PlayStation 3 XMB-inspired layout ===== */
+#menuScreen {
+  background: #061a35;
+  justify-content: stretch;
+}
+.menu-bg {
+  background:
+    radial-gradient(ellipse at 18% 60%, rgba(70,151,219,.28), transparent 45%),
+    radial-gradient(ellipse at 78% 28%, rgba(49,116,183,.22), transparent 42%),
+    linear-gradient(115deg, #071a35 0%, #0c3159 48%, #06172e 100%);
+}
+.menu-bg::before,
+.menu-bg::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+}
+.menu-bg::before {
+  opacity: .55;
+  background:
+    radial-gradient(ellipse at 15% 75%, transparent 28%, rgba(111,190,245,.16) 29%, transparent 30%),
+    radial-gradient(ellipse at 70% 20%, transparent 35%, rgba(133,207,255,.12) 36%, transparent 37%),
+    linear-gradient(165deg, transparent 45%, rgba(91,174,230,.13) 46%, transparent 48%);
+  filter: blur(2px);
+  animation: xmbWave 18s ease-in-out infinite alternate;
+}
+.menu-bg::after {
+  background: linear-gradient(180deg, rgba(2,12,28,.2), transparent 35%, rgba(1,10,24,.28));
+}
+@keyframes xmbWave {
+  from { transform: translate3d(-2%, 1%, 0) scale(1); }
+  to { transform: translate3d(2%, -2%, 0) scale(1.08); }
+}
+.blob, .bg-grid { display: none; }
+.menu-top {
+  position: absolute;
+  top: 0; left: 0;
+  padding: 24px 4.5vw;
+  justify-content: flex-end;
+  min-height: 78px;
+}
+.console-brand { display: none; }
+.menu-title-wrap { display: none; }
+.clock {
+  border: 0; background: transparent; box-shadow: none;
+  color: rgba(255,255,255,.9); font: 300 19px var(--font-ui);
+  letter-spacing: 1px; padding: 0;
+}
+.cat-rail {
+  position: absolute;
+  top: 13%; left: 5.5%; right: 5.5%;
+  bottom: auto; width: auto;
+  display: flex; flex-direction: row; justify-content: flex-start;
+  align-items: center; gap: clamp(20px, 4vw, 58px);
+  z-index: 8;
+}
+.cat-item {
+  padding: 8px 4px 13px; border: 0; border-radius: 0;
+  background: transparent !important; box-shadow: none !important;
+  opacity: .72; transform: none !important;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.cat-item .cat-ico {
+  font-size: clamp(25px, 3vw, 38px);
+  filter: grayscale(0); opacity: .9;
+}
+.cat-item .cat-name {
+  font-size: 10px; letter-spacing: 1.4px;
+  font-weight: 400; white-space: nowrap;
+}
+.cat-item.sel {
+  opacity: 1; color: #fff;
+  border-bottom: 2px solid rgba(220,244,255,.9);
+  text-shadow: 0 0 18px rgba(159,218,255,.75);
+}
+.cat-item.sel .cat-ico { filter: none; transform: scale(1.12); }
+.carousel-zone {
+  position: absolute;
+  left: 5.5%; top: 27%; bottom: 24%;
+  width: 48%; height: auto; flex: none;
+  display: block;
+}
+.carousel {
+  height: 100%; width: 100%;
+  overflow: visible;
+}
+.tile {
+  left: 0; top: 50%;
+  width: min(440px, 42vw); height: 66px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background: linear-gradient(90deg, rgba(210,235,255,.17), rgba(210,235,255,.035) 78%, transparent);
+  box-shadow: none;
+  overflow: visible;
+}
+.tile .tile-emoji {
+  left: 17px; right: auto; width: 42px;
+  font-size: 27px; justify-content: center;
+}
+.tile .tile-num, .tile .tile-2p, .tile .tile-shine { display: none; }
+.tile .tile-name {
+  left: 72px; right: 12px; top: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: flex-start;
+  padding: 0; text-align: left;
+  font: 300 17px var(--font-ui); letter-spacing: .4px;
+  background: none; text-shadow: none;
+}
+.tile.sel {
+  border-color: rgba(222,242,255,.72);
+  background: linear-gradient(90deg, rgba(222,242,255,.34), rgba(222,242,255,.09) 78%, transparent);
+  box-shadow: 0 0 22px rgba(133,201,246,.13);
+}
+.tile.dim { filter: none; }
+.info-panel {
+  position: absolute;
+  left: 57%; top: 34%; width: 35%;
+  margin: 0; padding: 0;
+  border: 0; border-radius: 0;
+  background: transparent; box-shadow: none;
+  backdrop-filter: none;
+  align-items: flex-start; gap: 16px;
+}
+.info-icon {
+  width: 54px; height: 54px; font-size: 29px;
+  border-radius: 50%; box-shadow: 0 0 28px var(--tg);
+}
+.info-name { font: 300 22px var(--font-ui); text-shadow: 0 0 15px rgba(190,225,255,.35); }
+.info-genre { color: #b7d9f3; font-size: 11px; letter-spacing: 2px; }
+.info-desc { color: rgba(231,243,255,.76); font-size: 14px; line-height: 1.6; }
+.info-badge { font-size: 10px; }
+.play-btn {
+  position: absolute; top: calc(100% + 24px); left: 70px;
+  padding: 11px 20px; border-radius: 3px;
+  background: rgba(220,239,255,.17); border: 1px solid rgba(225,242,255,.55);
+  color: #fff; box-shadow: none; font: 400 12px var(--font-ui);
+}
+.play-btn:hover { background: rgba(225,243,255,.3); box-shadow: 0 0 20px rgba(180,220,255,.2); }
+.hint-bar {
+  position: absolute; bottom: 0; left: 0;
+  padding: 18px 5.5% 24px;
+  border-top: 1px solid rgba(211,235,255,.12);
+  color: rgba(223,240,255,.7); font-size: 10px;
+}
+.hint-count { font: 11px var(--font-ui); letter-spacing: 1px; }
+.hint-keys { text-transform: uppercase; letter-spacing: 1px; }
+.hint-keys b { font: 11px var(--font-ui); border-radius: 2px; }
+.settings-panel {
+  left: 5.5%; top: 28%; transform: none;
+  width: min(520px, 44vw); max-height: 58vh;
+  border-radius: 4px; background: rgba(5,22,43,.86);
+}
+.set-row.sel { border-radius: 3px; }
+@media (max-width: 760px) {
+  .cat-rail { top: 11%; left: 4%; right: 4%; gap: 15px; justify-content: space-between; }
+  .cat-item { padding: 6px 2px 9px; }
+  .cat-item .cat-name { font-size: 8px; }
+  .carousel-zone { left: 4%; top: 26%; bottom: 34%; width: 92%; }
+  .tile { width: 90%; height: 52px; }
+  .tile .tile-name { font-size: 14px; }
+  .info-panel { left: 5%; top: auto; bottom: 15%; width: 90%; }
+  .info-icon { width: 42px; height: 42px; font-size: 23px; }
+  .info-name { font-size: 16px; }
+  .info-desc { font-size: 11px; }
+  .play-btn { left: 58px; top: calc(100% + 10px); }
+  .hint-bar { padding: 12px 4% max(14px, env(safe-area-inset-bottom)); }
+  .settings-panel { left: 4%; top: 26%; width: 92%; }
+}
+@media (max-width: 420px) {
+  .cat-item .cat-name { display: block; font-size: 7px; }
+  .cat-rail { gap: 8px; }
+  .cat-item .cat-ico { font-size: 22px; }
+}
