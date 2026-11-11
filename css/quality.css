@@ -325,3 +325,21 @@ button { font: inherit; }
   #menuScreen .menu-bg::before,
   #menuScreen .menu-bg::after { animation: none; }
 }
+
+/* Локализация и векторные значки XMB */
+.ui-icon { display:inline-block; flex:none; vertical-align:middle; color:currentColor; }
+.cat-ico .ui-icon { filter:drop-shadow(0 2px 8px rgba(130,205,255,.35)); }
+.tile-emoji { display:flex; align-items:center; justify-content:center; color:#e8f6ff; }
+.tile-emoji .ui-icon { width:34px; height:34px; filter:drop-shadow(0 0 12px rgba(120,200,255,.55)); }
+.info-icon .ui-icon { width:38px; height:38px; }
+.mode-icon .ui-icon, .gl-icon .ui-icon { width:1em; height:1em; }
+.set-name { display:flex; align-items:center; gap:12px; }
+.set-name .ui-icon { color:#9fd4ff; }
+.project-link { color:rgba(220,240,255,.68); text-decoration:none; font-size:10px; letter-spacing:.6px; }
+.project-link:hover { color:#fff; text-decoration:underline; }
+.boot-logo, .load-logo { font-family:Arial,sans-serif; font-weight:300; letter-spacing:1px; }
+.boot-logo span, .load-logo span { color:#d7edff; font-weight:600; }
+.boot-sub { color:#b8d8f5; }
+.boot-press { color:#e7f5ff; }
+.game-back-hint { text-align:center; }
+@media (max-width:760px) { .project-link { display:none; } }
