@@ -156,8 +156,8 @@ class App {
           // settings: up/down move, left/right adjust value
           if (e.code === 'ArrowUp' || e.code === 'KeyW') { e.preventDefault(); this.menu.move(-1); }
           else if (e.code === 'ArrowDown' || e.code === 'KeyS') { e.preventDefault(); this.menu.move(1); }
-          else if (e.code === 'ArrowLeft' || e.code === 'KeyA') { e.preventDefault(); this.menu.adjust(-1); }
-          else if (e.code === 'ArrowRight' || e.code === 'KeyD') { e.preventDefault(); this.menu.adjust(1); }
+          else if (e.code === 'ArrowLeft' || e.code === 'KeyA') { e.preventDefault(); this.menu.changeCategory(-1); }
+          else if (e.code === 'ArrowRight' || e.code === 'KeyD') { e.preventDefault(); this.menu.changeCategory(1); }
           else if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Space') { e.preventDefault(); this.menu.activate(); }
           else if (e.code === 'Escape') this.menu.back();
         } else {
