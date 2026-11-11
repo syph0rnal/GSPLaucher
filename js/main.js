@@ -40,6 +40,7 @@ class App {
       window.removeEventListener('pointerdown', onWake);
       this.audio.unlock();
       this.audio.boot();
+      document.querySelector('.boot-press').textContent = 'ЗАГРУЗКА СИСТЕМЫ';
       this.show('loading');
       this._runLoading();
     };
@@ -89,13 +90,13 @@ class App {
     this.audio.stopMusic();
     // mode select screen
     const modeOptions = document.getElementById('modeOptions');
-    document.getElementById('modeIcon').textContent = def.icon;
+    document.getElementById('modeIcon').innerHTML = iconSvg(def.icon,48);
     document.getElementById('modeGameName').textContent = def.name;
     modeOptions.innerHTML = '';
     this._modeIdx = 0;
     const opts = [
-      { label: '👤 1 PLAYER', mode: 1, enabled: true },
-      { label: def.twoP ? '👥 2 PLAYERS' : '👤 1 PLAYER ONLY', mode: 2, enabled: def.twoP }
+      { label: this.settings.language === 'en' ? '1 PLAYER' : '1 ИГРОК', mode: 1, enabled: true },
+      { label: def.twoP ? (this.settings.language === 'en' ? '2 PLAYERS' : '2 ИГРОКА') : (this.settings.language === 'en' ? '1 PLAYER ONLY' : 'ТОЛЬКО 1 ИГРОК'), mode: 2, enabled: def.twoP }
     ];
     opts.forEach((o, i) => {
       const div = document.createElement('div');
@@ -122,7 +123,7 @@ class App {
   _launchSelected(mode) {
     const def = this.currentGame;
     // game loading screen
-    document.getElementById('glIcon').textContent = def.icon;
+    document.getElementById('glIcon').innerHTML = iconSvg(def.icon,72);
     document.getElementById('glName').textContent = def.name;
     this.show('gameLoading');
     const fill = document.getElementById('glFill');
@@ -156,13 +157,15 @@ class App {
           // settings: up/down move, left/right adjust value
           if (e.code === 'ArrowUp' || e.code === 'KeyW') { e.preventDefault(); this.menu.move(-1); }
           else if (e.code === 'ArrowDown' || e.code === 'KeyS') { e.preventDefault(); this.menu.move(1); }
-          else if (e.code === 'ArrowLeft' || e.code === 'KeyA') { e.preventDefault(); this.menu.adjust(-1); }
-          else if (e.code === 'ArrowRight' || e.code === 'KeyD') { e.preventDefault(); this.menu.adjust(1); }
+          else if (e.code === 'ArrowLeft' || e.code === 'KeyA') { e.preventDefault(); this.menu.changeCategory(-1); }
+          else if (e.code === 'ArrowRight' || e.code === 'KeyD') { e.preventDefault(); this.menu.changeCategory(1); }
           else if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Space') { e.preventDefault(); this.menu.activate(); }
           else if (e.code === 'Escape') this.menu.back();
         } else {
-          if (e.code === 'ArrowLeft' || e.code === 'KeyA') { e.preventDefault(); this.menu.move(-1); }
-          else if (e.code === 'ArrowRight' || e.code === 'KeyD') { e.preventDefault(); this.menu.move(1); }
+          if (e.code === 'ArrowLeft' || e.code === 'KeyA') { e.preventDefault(); this.menu.changeCategory(-1); }
+          else if (e.code === 'ArrowRight' || e.code === 'KeyD') { e.preventDefault(); this.menu.changeCategory(1); }
+          else if (e.code === 'ArrowUp' || e.code === 'KeyW') { e.preventDefault(); this.menu.move(-1); }
+          else if (e.code === 'ArrowDown' || e.code === 'KeyS') { e.preventDefault(); this.menu.move(1); }
           else if (e.code === 'Enter' || e.code === 'NumpadEnter' || e.code === 'Space') { e.preventDefault(); this.menu.activate(); }
           else if (e.code === 'Escape') this.menu.back();
         }

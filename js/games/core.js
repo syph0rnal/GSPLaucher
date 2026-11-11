@@ -649,10 +649,9 @@ class PlatGame extends Game {
     ctx.fillRect(0, 0, this.W, 34);
     txt(ctx, `P1 ${padScore(this.scores[0])}`, 14, 17, { size: 10, color: '#7fc4ff' });
     if (this.is2P) txt(ctx, `P2 ${padScore(this.scores[1])}`, this.W - 14, 17, { size: 10, color: '#ff8d99', align: 'right' });
-    const lifeStr = '❤'.repeat(clamp(this.lives[0], 0, 5));
-    txt(ctx, lifeStr || '—', 160, 18, { size: 12, color: '#7fc4ff', px: false });
-    if (this.is2P) txt(ctx, '❤'.repeat(clamp(this.lives[1], 0, 5)) || '—', this.W - 160, 18, { size: 12, color: '#ff8d99', px: false, align: 'right' });
-    if (this.o.rings) txt(ctx, '🪙 ' + this.rings[0], 230, 17, { size: 10, color: '#ffd76b', px: false });
+    for (let i=0; i<clamp(this.lives[0],0,5); i++) drawHudHeart(ctx,160+i*15,18,'#7fc4ff',9);
+    if (this.is2P) for (let i=0; i<clamp(this.lives[1],0,5); i++) drawHudHeart(ctx,this.W-160-i*15,18,'#ff8d99',9);
+    if (this.o.rings) txt(ctx, 'КОЛЬЦА ' + this.rings[0], 230, 17, { size: 10, color: '#ffd76b', px: false });
     if (this.o.timer) txt(ctx, 'TIME ' + Math.ceil(this.timeLeft), this.W / 2, 17, { size: 11, color: this.timeLeft < 20 ? '#ff6b7a' : '#e8f4ff', align: 'center' });
     if (this.o.fruit) {
       ctx.fillStyle = 'rgba(255,255,255,.15)'; ctx.fillRect(this.W / 2 - 60, 24, 120, 6);
@@ -1476,3 +1475,10 @@ window.PlatGame = PlatGame;
 window.FighterGame = FighterGame;
 window.VertShooter = VertShooter;
 window.BrawlerGame = BrawlerGame;
+
+/* Маленькое векторное сердце для индикатора жизней — без emoji-шрифта. */
+function drawHudHeart(ctx,x,y,color,size=9){
+  ctx.save(); ctx.translate(x,y); ctx.scale(size/12,size/12); ctx.fillStyle=color;
+  ctx.beginPath(); ctx.moveTo(0,4); ctx.bezierCurveTo(-13,-5,-7,-13,0,-7); ctx.bezierCurveTo(7,-13,13,-5,0,4); ctx.fill(); ctx.restore();
+}
+window.drawHudHeart=drawHudHeart;
