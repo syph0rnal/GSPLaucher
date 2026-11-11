@@ -152,7 +152,7 @@ class Menu {
       el.infoIcon.innerHTML = iconSvg('gamepad',38);
       el.infoName.textContent = CATS[this.cat].name;
       el.infoGenre.textContent = CATS[this.cat].sub;
-      el.infoDesc.textContent = this.cat === 3 ? 'Измените параметры консоли ниже.' : (this.cat === 2 ? 'Вы ещё не запускали игры.' : 'В этой категории пока нет игр.');
+      el.infoDesc.textContent = this.app.settings.language === 'en' ? (this.cat === 3 ? 'Change console settings below.' : (this.cat === 2 ? 'You have not launched any games yet.' : 'There are no games in this category.')) : (this.cat === 3 ? 'Измените параметры консоли ниже.' : (this.cat === 2 ? 'Вы ещё не запускали игры.' : 'В этой категории пока нет игр.'));
       el.infoBadge.textContent = '';
       el.infoBadge.style.display = 'none';
       el.playBtn.style.display = 'none';
@@ -195,9 +195,9 @@ class Menu {
     const rows = panel.querySelector('#setRows');
     this._setRowsDef = [
       { name: en ? 'VOLUME' : 'ГРОМКОСТЬ', get: () => Math.round(s.volume * 100) + '%', left: () => this._vol(-0.1), right: () => this._vol(0.1), icon:'volume' },
-      { name: en ? 'BACKGROUND MUSIC' : 'ФОНОВАЯ МУЗЫКА', get: () => s.music ? 'ВКЛ' : 'ВЫКЛ', toggle: () => this._music(), icon:'music' },
-      { name: en ? 'INTERFACE SOUNDS' : 'ЗВУКИ ИНТЕРФЕЙСА', get: () => s.sfx ? 'ВКЛ' : 'ВЫКЛ', toggle: () => this._sfx(), icon:'sound' },
-      { name: en ? 'FULLSCREEN' : 'ПОЛНОЭКРАННЫЙ РЕЖИМ', get: () => document.fullscreenElement ? 'ВКЛ' : 'ВЫКЛ', toggle: () => this._fullscreen(), icon:'fullscreen' },
+      { name: en ? 'BACKGROUND MUSIC' : 'ФОНОВАЯ МУЗЫКА', get: () => s.music ? (en ? 'ON' : 'ВКЛ') : (en ? 'OFF' : 'ВЫКЛ'), toggle: () => this._music(), icon:'music' },
+      { name: en ? 'INTERFACE SOUNDS' : 'ЗВУКИ ИНТЕРФЕЙСА', get: () => s.sfx ? (en ? 'ON' : 'ВКЛ') : (en ? 'OFF' : 'ВЫКЛ'), toggle: () => this._sfx(), icon:'sound' },
+      { name: en ? 'FULLSCREEN' : 'ПОЛНОЭКРАННЫЙ РЕЖИМ', get: () => document.fullscreenElement ? (en ? 'ON' : 'ВКЛ') : (en ? 'OFF' : 'ВЫКЛ'), toggle: () => this._fullscreen(), icon:'fullscreen' },
       { name: en ? 'LANGUAGE' : 'ЯЗЫК / LANGUAGE', get: () => s.language === 'en' ? 'ENGLISH' : 'РУССКИЙ', toggle: () => this._language(), icon:'user' },
       { name: en ? 'CONTROLS' : 'УПРАВЛЕНИЕ', get: () => en ? 'INFO' : 'ИНФО', toggle: null, icon:'gamepad' },
       { name: en ? 'RESET SAVED DATA' : 'СБРОСИТЬ СОХРАНЁННЫЕ ДАННЫЕ', get: () => en ? 'RESET' : 'СБРОС', danger: true, toggle: () => this._reset(), icon:'trash' }
