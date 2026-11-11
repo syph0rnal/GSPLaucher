@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#050b18">
-<meta name="description" content="RETROBOX·40 — виртуальная ретро-консоль с аркадными играми для одного и двух игроков.">
+<meta name="description" content="GSPLaucher — браузерная игровая консоль с меню в стиле PlayStation 3 и подборкой аркадных игр.">
 <meta name="color-scheme" content="dark">
 <title>GSPLaucher — игровая консоль</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,10 +28,10 @@
   <div class="scanlines"></div>
 </div>
 
-<!-- ============ CONSOLE LOADING ============ -->
+<!-- ============ ЗАГРУЗКА КОНСОЛИ ============ -->
 <div id="loadingScreen" class="screen">
   <div class="load-inner">
-    <div class="load-logo">RETRO<span>BOX</span><em>·40</em></div>
+    <div class="load-logo">PlayStation<span> 3</span></div>
     <div class="load-ring"><div class="load-arc"></div><div class="load-dot"></div></div>
     <div class="load-text">ЗАГРУЗКА<span class="dots">...</span></div>
     <div class="load-bar"><div class="load-fill" id="loadFill"></div></div>
@@ -41,7 +41,7 @@
   <div class="scanlines"></div>
 </div>
 
-<!-- ============ MAIN MENU (XMB style) ============ -->
+<!-- ============ ГЛАВНОЕ МЕНЮ (СТИЛЬ XMB) ============ -->
 <div id="menuScreen" class="screen">
   <div class="menu-bg">
     <div class="blob blob-1"></div>
@@ -52,7 +52,7 @@
   </div>
 
   <header class="menu-top">
-    <div class="console-brand">RETRO<span>BOX</span><em>·40</em></div>
+    <div class="console-brand">PlayStation<span> 3</span></div>
     <div class="menu-title-wrap">
       <div class="menu-title" id="menuTitle">ИГРЫ</div>
       <div class="menu-subtitle" id="menuSubtitle">20 ИЗБРАННЫХ ИГР</div>
@@ -95,13 +95,13 @@
       <div class="mode-icon" id="modeIcon"></div>
       <div class="mode-title" id="modeGameName">ИГРА</div>
     </div>
-    <div class="mode-label">PLAYER MODE</div>
+    <div class="mode-label">РЕЖИМ ИГРЫ</div>
     <div class="mode-options" id="modeOptions"></div>
     <div class="mode-hint">↑ ↓ ВЫБОР &nbsp;·&nbsp; ENTER НАЧАТЬ &nbsp;·&nbsp; ESC НАЗАД</div>
   </div>
 </div>
 
-<!-- ============ GAME LOADING ============ -->
+<!-- ============ ЗАГРУЗКА ИГРЫ ============ -->
 <div id="gameLoading" class="screen overlay-screen">
   <div class="gl-box glass">
     <div class="gl-icon" id="glIcon"></div>
@@ -111,7 +111,7 @@
   </div>
 </div>
 
-<!-- ============ GAME SCREEN ============ -->
+<!-- ============ ЭКРАН ИГРЫ ============ -->
 <div id="gameScreen" class="screen">
   <div class="game-frame">
     <canvas id="gameCanvas" width="960" height="540"></canvas>
