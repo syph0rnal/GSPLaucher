@@ -1,0 +1,105 @@
+/* ============================================================
+   RETROBOX·40 — responsive polish, accessibility and interaction
+   Loaded after style.css so the original visual identity stays intact.
+   ============================================================ */
+:root {
+  --focus-ring: 0 0 0 3px rgba(5, 11, 24, .95), 0 0 0 5px rgba(125, 220, 255, .95);
+}
+button, .cat-item, .tile, .mode-opt, .set-row { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, .cat-item:focus-visible, .tile:focus-visible,
+.mode-opt:focus-visible, .set-row:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring), 0 0 28px rgba(79, 216, 255, .28);
+}
+button { font: inherit; }
+.play-btn { min-height: 48px; }
+.cat-item, .tile, .mode-opt, .set-row { touch-action: manipulation; }
+.glass { background-color: rgba(8, 20, 42, .62); }
+.info-panel { border-color: rgba(160, 220, 255, .2); }
+.tile:hover:not(.sel) { filter: brightness(1.12) saturate(1.08); }
+.play-btn:focus-visible { outline: none; }
+#gameCanvas { touch-action: manipulation; }
+::selection { background: rgba(79, 216, 255, .35); color: #fff; }
+
+@media (max-width: 1100px) {
+  .cat-rail { left: 18px; width: 158px; }
+  .cat-item { padding: 10px; gap: 8px; }
+  .cat-item .cat-name { font-size: 10px; letter-spacing: 1px; }
+  .carousel { transform: translateX(55px); }
+  .info-panel { width: min(820px, calc(100vw - 210px)); margin-left: 190px; }
+  .hint-bar { padding-left: 24px; padding-right: 24px; }
+}
+@media (max-width: 760px) {
+  .menu-top { padding: max(16px, env(safe-area-inset-top)) 16px 8px; gap: 10px; }
+  .console-brand { font-size: 9px; letter-spacing: 1px; }
+  .menu-title { font-size: clamp(12px, 3vw, 19px); letter-spacing: 2px; }
+  .menu-subtitle { font-size: 8px; letter-spacing: 2px; }
+  .clock { font-size: 9px; padding: 8px 10px; }
+  .cat-rail {
+    position: relative; inset: auto; width: calc(100% - 24px); margin: 12px auto 0;
+    flex-direction: row; justify-content: center; gap: 6px; overflow-x: auto;
+    scrollbar-width: none; z-index: 7;
+  }
+  .cat-rail::-webkit-scrollbar { display: none; }
+  .cat-item { flex: 0 0 auto; padding: 9px 11px; }
+  .cat-item .cat-ico { font-size: 16px; }
+  .cat-item .cat-name { font-size: 9px; white-space: nowrap; }
+  .carousel-zone { min-height: 210px; }
+  .carousel { height: 240px; transform: none; }
+  .tile { width: 142px; height: 142px; border-radius: 18px; }
+  .tile .tile-emoji { font-size: 58px; }
+  .tile .tile-name { font-size: 7px; }
+  .info-panel {
+    width: calc(100% - 24px); margin: 0 auto 8px; padding: 12px;
+    gap: 12px; border-radius: 14px;
+  }
+  .info-icon { width: 48px; height: 48px; font-size: 26px; border-radius: 12px; }
+  .info-name { font-size: 11px; line-height: 1.5; }
+  .info-badge { font-size: 8px; padding: 3px 6px; }
+  .info-genre { font-size: 9px; letter-spacing: 1px; }
+  .info-desc { font-size: 11px; }
+  .play-btn { padding: 12px 14px; font-size: 9px; border-radius: 10px; }
+  .hint-bar { padding: 10px 14px max(14px, env(safe-area-inset-bottom)); font-size: 8px; letter-spacing: 1px; }
+  .hint-keys b { font-size: 7px; padding: 4px; }
+  .settings-panel { width: calc(100% - 24px); max-height: 48vh; overflow-y: auto; padding: 16px; }
+  .set-row { gap: 12px; padding: 12px 8px; }
+  .set-row .set-name { font-size: 10px; letter-spacing: .5px; }
+  .set-row .set-val { font-size: 8px; white-space: nowrap; }
+  .mode-box, .gl-box { width: calc(100% - 28px); padding: 24px 18px; }
+  .mode-title, .gl-name { font-size: 13px; }
+  .mode-opt { font-size: 10px; padding: 14px 10px; }
+  .mode-hint { font-size: 8px; letter-spacing: 1px; }
+  .load-bar { width: min(340px, calc(100vw - 64px)); }
+  .boot-logo { font-size: clamp(24px, 8vw, 38px); }
+  .boot-sub { font-size: 8px; letter-spacing: 3px; }
+  .boot-press { font-size: 9px; letter-spacing: 1px; }
+  .game-frame { width: 100%; border-radius: 0; }
+  #gameCanvas { width: 100%; height: auto; max-width: 100vw; max-height: 78vh; }
+  .game-back-hint { font-size: 8px; }
+}
+@media (max-width: 420px) {
+  .console-brand { display: none; }
+  .menu-title-wrap { margin-right: auto; text-align: left; }
+  .cat-item .cat-name { display: none; }
+  .cat-item { min-width: 42px; justify-content: center; }
+  .info-desc { display: none; }
+  .info-panel { min-height: 68px; }
+  .play-btn { padding: 11px 10px; }
+  .hint-keys { letter-spacing: 0; }
+}
+@media (max-height: 620px) and (min-width: 761px) {
+  .menu-top { padding-top: 12px; }
+  .cat-rail { top: 76px; bottom: 86px; }
+  .carousel { height: 230px; }
+  .tile { width: 145px; height: 145px; }
+  .info-panel { padding: 10px 16px; margin-bottom: 4px; }
+  .hint-bar { padding-top: 6px; padding-bottom: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
