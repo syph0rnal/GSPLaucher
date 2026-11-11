@@ -237,6 +237,11 @@ class Menu {
     this._buildCatRail(); this._applyCat(this.cat,true);
     document.documentElement.lang = en ? 'en' : 'ru';
     document.querySelector('.game-back-hint').textContent = en ? 'P — PAUSE · ESC — MENU' : 'P — ПАУЗА · ESC — МЕНЮ';
+    document.querySelector('.play-btn').textContent = en ? 'PLAY' : 'ЗАПУСТИТЬ';
+    document.querySelector('.mode-label').textContent = en ? 'PLAYER MODE' : 'РЕЖИМ ИГРЫ';
+    document.querySelector('.mode-hint').textContent = en ? '↑ ↓ SELECT · ENTER START · ESC BACK' : '↑ ↓ ВЫБОР · ENTER НАЧАТЬ · ESC НАЗАД';
+    document.querySelector('.gl-text').textContent = en ? 'LOADING GAME...' : 'ЗАГРУЗКА ИГРЫ...';
+    document.querySelector('.hint-keys').innerHTML = en ? '<b>← →</b> CATEGORY&nbsp;&nbsp;<b>↑ ↓</b> SELECT&nbsp;&nbsp;<b>ENTER</b> START&nbsp;&nbsp;<b>ESC</b> BACK' : '<b>← →</b> КАТЕГОРИИ&nbsp;&nbsp;<b>↑ ↓</b> ВЫБОР&nbsp;&nbsp;<b>ENTER</b> ЗАПУСК&nbsp;&nbsp;<b>ESC</b> НАЗАД';
   }
   _music() {
     this.app.settings.music = !this.app.settings.music;
