@@ -2,10 +2,10 @@
    menu.js — XMB-style main menu: carousel, categories, settings
    ============================================================ */
 const CATS = [
-  { id: 'games',   icon: '🎮', name: 'RETRO GAMES',      sub: '40 BUILT-IN CLASSICS' },
-  { id: 'friends', icon: '👥', name: 'PLAY WITH FRIEND', sub: '2 PLAYER GAMES' },
-  { id: 'recent',  icon: '🕹️', name: 'RECENTLY PLAYED',  sub: 'YOUR LAST SESSIONS' },
-  { id: 'settings',icon: '⚙️', name: 'SETTINGS',         sub: 'CONSOLE CONFIGURATION' }
+  { id: 'games', icon: 'games', name: 'ИГРЫ', sub: '20 ИЗБРАННЫХ ИГР' },
+  { id: 'friends', icon: 'friends', name: 'ИГРА ВДВОЁМ', sub: 'ИГРЫ ДЛЯ ДВОИХ' },
+  { id: 'recent', icon: 'recent', name: 'НЕДАВНИЕ', sub: 'ПОСЛЕДНИЕ ЗАПУСКИ' },
+  { id: 'settings', icon: 'settings', name: 'НАСТРОЙКИ', sub: 'ПАРАМЕТРЫ КОНСОЛИ' }
 ];
 
 class Menu {
@@ -38,6 +38,7 @@ class Menu {
     this._clockTick();
     setInterval(() => this._clockTick(), 15000);
     this._applyCat(0, true);
+    this._applyLanguage();
   }
 
   _clockTick() {
@@ -51,7 +52,7 @@ class Menu {
     CATS.forEach((c, i) => {
       const div = document.createElement('div');
       div.className = 'cat-item' + (i === 0 ? ' sel' : '');
-      div.innerHTML = `<span class="cat-ico">${c.icon}</span><span class="cat-name">${c.name}</span>`;
+      div.innerHTML = `<span class="cat-ico">${iconSvg(c.icon,34)}</span><span class="cat-name">${c.name}</span>`;
       div.addEventListener('click', () => { this.app.audio.navigate(); this._applyCat(i); });
       rail.appendChild(div);
     });
@@ -112,9 +113,9 @@ class Menu {
       tile.style.setProperty('--tg', `rgba(${r},${gg},${b},.55)`);
       tile.innerHTML = `
         <div class="tile-shine"></div>
-        <div class="tile-emoji">${g.icon}</div>
+        <div class="tile-emoji">${iconSvg(g.icon,38)}</div>
         <div class="tile-num">${String(i + 1).padStart(2, '0')}</div>
-        ${g.twoP ? '<div class="tile-2p">👥 2P</div>' : ''}
+        ${g.twoP ? '<div class="tile-2p">2 ИГРОКА</div>' : ''}
         <div class="tile-name">${g.name}</div>`;
       tile.addEventListener('click', () => {
         if (this.idx === i) this._confirm();
@@ -148,10 +149,10 @@ class Menu {
   _setInfo(g) {
     const el = this.el;
     if (!g) {
-      el.infoIcon.textContent = '—';
+      el.infoIcon.innerHTML = iconSvg('gamepad',38);
       el.infoName.textContent = CATS[this.cat].name;
       el.infoGenre.textContent = CATS[this.cat].sub;
-      el.infoDesc.textContent = this.cat === 3 ? 'Adjust console settings below.' : (this.cat === 2 ? 'No games played yet. Launch something!' : 'No games in this category.');
+      el.infoDesc.textContent = this.cat === 3 ? 'Измените параметры консоли ниже.' : (this.cat === 2 ? 'Вы ещё не запускали игры.' : 'В этой категории пока нет игр.');
       el.infoBadge.textContent = '';
       el.infoBadge.style.display = 'none';
       el.playBtn.style.display = 'none';
@@ -161,16 +162,16 @@ class Menu {
       return;
     }
     const [r, gg, b] = g.color;
-    el.infoIcon.textContent = g.icon;
+    el.infoIcon.innerHTML = iconSvg(g.icon,38);
     el.infoName.textContent = g.name;
     el.infoGenre.textContent = g.genre;
     el.infoDesc.textContent = g.desc;
     el.infoBadge.style.display = '';
     if (g.twoP) {
-      el.infoBadge.textContent = '👥 2 PLAYERS';
+      el.infoBadge.textContent = this.app.settings.language === 'en' ? '2 PLAYERS' : '2 ИГРОКА';
       el.infoBadge.classList.remove('solo');
     } else {
-      el.infoBadge.textContent = '👤 1 PLAYER';
+      el.infoBadge.textContent = this.app.settings.language === 'en' ? '1 PLAYER' : '1 ИГРОК';
       el.infoBadge.classList.add('solo');
     }
     el.playBtn.style.display = '';
@@ -185,19 +186,21 @@ class Menu {
   /* ---------- settings ---------- */
   _showSettings() {
     const s = this.app.settings;
+    const en = s.language === 'en';
     const panel = this.el.settingsPanel;
     panel.classList.remove('hidden');
     panel.innerHTML = `
-      <div class="set-title">⚙️ SETTINGS</div>
+      <div class="set-title">${en ? 'SYSTEM SETTINGS' : 'НАСТРОЙКИ СИСТЕМЫ'}</div>
       <div id="setRows"></div>`;
     const rows = panel.querySelector('#setRows');
     this._setRowsDef = [
-      { name: '🔊 VOLUME', get: () => Math.round(s.volume * 100) + '%', left: () => this._vol(-0.1), right: () => this._vol(0.1) },
-      { name: '🎵 MUSIC', get: () => s.music ? 'ON' : 'OFF', toggle: () => this._music() },
-      { name: '🔔 UI SOUNDS', get: () => s.sfx ? 'ON' : 'OFF', toggle: () => this._sfx() },
-      { name: '⛶ FULLSCREEN', get: () => document.fullscreenElement ? 'ON' : 'OFF', toggle: () => this._fullscreen() },
-      { name: '🎮 CONTROLS: P1 WASD+SPACE/SHIFT · P2 ARROWS+ENTER/R-SHIFT', get: () => 'INFO', toggle: null },
-      { name: '🗑️ RESET SAVED DATA', get: () => 'RESET', danger: true, toggle: () => this._reset() }
+      { name: en ? 'VOLUME' : 'ГРОМКОСТЬ', get: () => Math.round(s.volume * 100) + '%', left: () => this._vol(-0.1), right: () => this._vol(0.1), icon:'volume' },
+      { name: en ? 'BACKGROUND MUSIC' : 'ФОНОВАЯ МУЗЫКА', get: () => s.music ? 'ВКЛ' : 'ВЫКЛ', toggle: () => this._music(), icon:'music' },
+      { name: en ? 'INTERFACE SOUNDS' : 'ЗВУКИ ИНТЕРФЕЙСА', get: () => s.sfx ? 'ВКЛ' : 'ВЫКЛ', toggle: () => this._sfx(), icon:'sound' },
+      { name: en ? 'FULLSCREEN' : 'ПОЛНОЭКРАННЫЙ РЕЖИМ', get: () => document.fullscreenElement ? 'ВКЛ' : 'ВЫКЛ', toggle: () => this._fullscreen(), icon:'fullscreen' },
+      { name: en ? 'LANGUAGE' : 'ЯЗЫК / LANGUAGE', get: () => s.language === 'en' ? 'ENGLISH' : 'РУССКИЙ', toggle: () => this._language(), icon:'user' },
+      { name: en ? 'CONTROLS' : 'УПРАВЛЕНИЕ', get: () => en ? 'INFO' : 'ИНФО', toggle: null, icon:'gamepad' },
+      { name: en ? 'RESET SAVED DATA' : 'СБРОСИТЬ СОХРАНЁННЫЕ ДАННЫЕ', get: () => en ? 'RESET' : 'СБРОС', danger: true, toggle: () => this._reset(), icon:'trash' }
     ];
     this.setIdx = clamp(this.setIdx, 0, this._setRowsDef.length - 1);
     this._renderSettings();
@@ -209,7 +212,7 @@ class Menu {
     this._setRowsDef.forEach((d, i) => {
       const div = document.createElement('div');
       div.className = 'set-row' + (i === this.setIdx ? ' sel' : '') + (d.danger ? ' danger' : '');
-      div.innerHTML = `<span class="set-name">${d.name}</span><span class="set-val">${d.get()}</span>`;
+      div.innerHTML = `<span class="set-name">${iconSvg(d.icon || "gamepad",20)}${d.name}</span><span class="set-val">${d.get()}</span>`;
       div.addEventListener('click', () => { this.setIdx = i; this._renderSettings(); if (d.toggle) d.toggle(); });
       rows.appendChild(div);
     });
@@ -225,6 +228,15 @@ class Menu {
   _vol(d) {
     this.app.settings.volume = clamp(Math.round((this.app.settings.volume + d) * 10) / 10, 0, 1);
     this._saveSettings(); this._renderSettings(); this.app.audio.blip(600);
+  }
+  _language() { this.app.settings.language = this.app.settings.language === 'ru' ? 'en' : 'ru'; this._saveSettings(); this._applyLanguage(); this._renderSettings(); }
+  _applyLanguage() {
+    const en = this.app.settings.language === 'en';
+    const labels = en ? [['GAMES','20 SELECTED GAMES'],['PLAY WITH FRIEND','2 PLAYER GAMES'],['RECENTLY PLAYED','LAST SESSIONS'],['SETTINGS','CONSOLE SETTINGS']] : [['ИГРЫ','20 ИЗБРАННЫХ ИГР'],['ИГРА ВДВОЁМ','ИГРЫ ДЛЯ ДВОИХ'],['НЕДАВНИЕ','ПОСЛЕДНИЕ ЗАПУСКИ'],['НАСТРОЙКИ','ПАРАМЕТРЫ КОНСОЛИ']];
+    CATS.forEach((c,i)=>{ c.name=labels[i][0]; c.sub=labels[i][1]; });
+    this._buildCatRail(); this._applyCat(this.cat,true);
+    document.documentElement.lang = en ? 'en' : 'ru';
+    document.querySelector('.game-back-hint').textContent = en ? 'P — PAUSE · ESC — MENU' : 'P — ПАУЗА · ESC — МЕНЮ';
   }
   _music() {
     this.app.settings.music = !this.app.settings.music;
