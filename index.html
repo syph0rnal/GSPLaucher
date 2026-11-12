@@ -13,7 +13,7 @@
 <body>
 <div id="boot" class="screen boot">
   <div class="boot-mark"><span class="ps-symbol">✦</span><div><strong>PlayStation<span> 3</span></strong><small>GSP CONSOLE SYSTEM</small></div></div>
-  <div class="boot-bottom">НАЖМИТЕ ЛЮБУЮ КЛАВИШУ ДЛЯ ВКЛЮЧЕНИЯ</div>
+  <div id="bootPrompt" class="boot-bottom">НАЖМИТЕ ЛЮБУЮ КЛАВИШУ ДЛЯ ВКЛЮЧЕНИЯ</div>
   <div class="boot-orbit"></div>
 </div>
 <div id="home" class="screen home hidden">
@@ -21,12 +21,12 @@
   <header class="topbar"><div class="system-brand">GS<span>P</span> · PLAYSTATION 3</div><div class="system-status"><span id="statusLabel">СИСТЕМА ГОТОВА</span><span id="clock">00:00</span></div></header>
   <nav id="categories" class="categories" aria-label="Категории"></nav>
   <main class="xmb-content"><section class="game-list" id="gameList"></section><aside class="details" id="details"><div class="cover" id="cover"></div><div class="detail-copy"><div class="detail-kicker" id="detailKicker">КОЛЛЕКЦИЯ</div><h1 id="detailName">Игры</h1><p id="detailDescription">Выберите игру.</p><div class="detail-meta" id="detailMeta"></div><button id="launch" class="launch">ЗАПУСТИТЬ <span>↗</span></button></div></aside></main>
-  <footer class="bottom-bar"><div><span class="keycap">←</span><span class="keycap">→</span> КАТЕГОРИЯ <span class="keycap">↑</span><span class="keycap">↓</span> ВЫБОР</div><a href="https://syph0rnal.github.io/GSPLaucher/" target="_blank" rel="noopener">syph0rnal.github.io/GSPLaucher</a><div><span class="keycap">ENTER</span> ОТКРЫТЬ <span class="keycap">ESC</span> НАЗАД</div></footer>
+  <footer class="bottom-bar"><div id="homeFooterLeft"><span class="keycap">←</span><span class="keycap">→</span> КАТЕГОРИЯ <span class="keycap">↑</span><span class="keycap">↓</span> ВЫБОР</div><a href="https://syph0rnal.github.io/GSPLaucher/" target="_blank" rel="noopener">syph0rnal.github.io/GSPLaucher</a><div id="homeFooterRight"><span class="keycap">ENTER</span> ОТКРЫТЬ <span class="keycap">ESC</span> НАЗАД</div></footer>
 </div>
 <div id="game" class="screen game-screen hidden">
   <header class="game-top"><button id="back" class="ghost-button">← В МЕНЮ</button><div><strong id="gameTitle">ИГРА</strong><small id="gameSubtitle">GSPLAUCHER ARCADE</small></div><div class="game-actions"><span id="score">СЧЁТ: 0</span><button id="pause" class="ghost-button">ПАУЗА</button></div></header>
   <div class="stage"><canvas id="canvas" width="960" height="540" aria-label="Игровое поле"></canvas><div id="gameOverlay" class="game-overlay hidden"><div class="overlay-card"><div class="overlay-eyebrow">GSPLAUCHER SYSTEM</div><h2 id="overlayTitle">ПАУЗА</h2><p id="overlayText">Игра приостановлена</p><div class="overlay-actions"><button id="resume" class="launch">ПРОДОЛЖИТЬ</button><button id="restart" class="ghost-button">ЗАНОВО</button></div></div></div></div>
-  <footer class="game-footer"><span id="controlsText">УПРАВЛЕНИЕ</span><span>ESC — МЕНЮ · P — ПАУЗА</span></footer>
+  <footer class="game-footer"><span id="controlsText">УПРАВЛЕНИЕ</span><span id="gameFooterHint">ESC — МЕНЮ · P — ПАУЗА</span></footer>
 </div>
 <script src="js/games.js"></script>
 <script src="js/app.js"></script>
