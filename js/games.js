@@ -61,14 +61,14 @@ game.draw()
 },
 update(dt){
 if(flashTimer>0){flashTimer-=dt;if(flashTimer<=0)flash=-1}
-if(phase==='show'){clock+=dt;if(clock>=.58){clock=0;showIndex++;if(showIndex>=sequence.length){phase='input';showIndex=-1;inputIndex=0}}}
+if(phase==='show'){clock+=dt;if(clock>=.62){clock-=.62;showIndex++;if(showIndex>=sequence.length){phase='input';showIndex=-1;inputIndex=0}}}
 else if(phase==='between'){clock+=dt;if(clock>=.85)beginNext()}
 },
 draw(){
 base();text('MEMORY PULSE',W/2,78,16,palette.ice,'center');
 for(let i=0;i<4;i++){
 const x=x0+(i%2)*(size+gap),y=y0+Math.floor(i/2)*(size+gap);
-const active=(phase==='show'&&showIndex>=0&&sequence[showIndex]===i)||(flash===i&&flashTimer>0);
+const active=(phase==='show'&&showIndex>=0&&clock<.36&&sequence[showIndex]===i)||(flash===i&&flashTimer>0);
 rect(x,y,size,size,active?bright[i]:colors[i],13);
 text(String(i+1),x+size/2,y+size/2+10,34,active?'#07182b':palette.ice,'center');
 if(phase==='input'&&cursor===i){ctx.strokeStyle=palette.ice;ctx.lineWidth=3;ctx.strokeRect(x+4,y+4,size-8,size-8)}
