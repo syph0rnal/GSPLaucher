@@ -9,7 +9,8 @@ const catalog=[
 {id:'tetris',name:'Block System',icon:'▦',genre:'ГОЛОВОЛОМКА',desc:'Собирайте полные линии из падающих блоков.',keys:'← → — ДВИЖЕНИЕ · ↑ — ПОВОРОТ · ↓ — УСКОРИТЬ',players:'1 ИГРОК'},
 {id:'merge',name:'2048',icon:'▧',genre:'ЛОГИКА',desc:'Объединяйте одинаковые плитки и соберите 2048.',keys:'СТРЕЛКИ / WASD — СДВИГ ПОЛЯ',players:'1 ИГРОК'},
 {id:'mines',name:'Сапёр',icon:'▩',genre:'ЛОГИКА',desc:'Откройте безопасные клетки и отметьте все мины.',keys:'КЛИК — ОТКРЫТЬ · ПКМ — ФЛАГ',players:'1 ИГРОК'},
-{id:'circuit',name:'Circuit Link',icon:'⌘',genre:'ЛОГИКА',desc:'Поверните сегменты и восстановите энергетический маршрут от входа до выхода.',keys:'СТРЕЛКИ / WASD — ВЫБОР · ENTER / SPACE — ПОВОРОТ · R — СБРОС',players:'1 ИГРОК'}
+{id:'circuit',name:'Circuit Link',icon:'⌘',genre:'ЛОГИКА',desc:'Поверните сегменты и восстановите энергетический маршрут от входа до выхода.',keys:'СТРЕЛКИ / WASD — ВЫБОР · ENTER / SPACE — ПОВОРОТ · R — СБРОС',players:'1 ИГРОК'},
+{id:'memory',name:'Memory Pulse',icon:'✦',genre:'ЛОГИКА',desc:'Запоминайте последовательность световых импульсов и повторяйте её без ошибок.',keys:'СТРЕЛКИ / WASD — ВЫБОР · ENTER / SPACE — ПОДТВЕРДИТЬ',players:'1 ИГРОК'}
 ];
 const categories=[{id:'all',label:'ИГРЫ',icon:'▦'},{id:'arcade',label:'АРКАДЫ',icon:'◈'},{id:'logic',label:'ЛОГИКА',icon:'◇'},{id:'settings',label:'НАСТРОЙКИ',icon:'⚙'}];
 const state={cat:0,index:0,list:catalog,screen:'boot',paused:false,over:false,settings:{sound:true,language:'ru'},game:null};
@@ -22,7 +23,8 @@ runner:{name:'Neon Runner',genre:'RUNNER',desc:'Jump over obstacles and survive 
 tetris:{name:'Block System',genre:'PUZZLE',desc:'Complete full lines with falling blocks.',keys:'← → — MOVE · ↑ — ROTATE · ↓ — SOFT DROP',players:'1 PLAYER'},
 merge:{name:'2048',genre:'LOGIC',desc:'Merge matching tiles and create the 2048 tile.',keys:'ARROWS / WASD — MOVE TILES',players:'1 PLAYER'},
 mines:{name:'Minesweeper',genre:'LOGIC',desc:'Reveal safe cells and mark every mine.',keys:'CLICK — REVEAL · RIGHT CLICK — FLAG',players:'1 PLAYER'},
-circuit:{name:'Circuit Link',genre:'LOGIC',desc:'Rotate the pipe segments and restore the energy route from input to output.',keys:'ARROWS / WASD — SELECT · ENTER / SPACE — ROTATE · R — RESET',players:'1 PLAYER'}
+circuit:{name:'Circuit Link',genre:'LOGIC',desc:'Rotate the pipe segments and restore the energy route from input to output.',keys:'ARROWS / WASD — SELECT · ENTER / SPACE — ROTATE · R — RESET',players:'1 PLAYER'},
+memory:{name:'Memory Pulse',genre:'LOGIC',desc:'Remember the light-pulse sequence and repeat it without mistakes.',keys:'ARROWS / WASD — SELECT · ENTER / SPACE — CONFIRM',players:'1 PLAYER'}
 }};
 const tr=(ru,english)=>state.settings.language==='ru'?ru:english;
 const gameInfo=g=>state.settings.language==='ru'?g:{...g,...en.games[g.id]};

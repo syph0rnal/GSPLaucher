@@ -41,6 +41,54 @@ function drawPipe(p){const cx=ox+p.c*cell+cell/2,cy=oy+p.r*cell+cell/2,reach=cel
 game={init(){resetPuzzle()},key(e){if(solved)return;if(e.code==='ArrowUp'||e.code==='KeyW')cursor.r=Math.max(0,cursor.r-1);else if(e.code==='ArrowDown'||e.code==='KeyS')cursor.r=Math.min(rows-1,cursor.r+1);else if(e.code==='ArrowLeft'||e.code==='KeyA')cursor.c=Math.max(0,cursor.c-1);else if(e.code==='ArrowRight'||e.code==='KeyD')cursor.c=Math.min(cols-1,cursor.c+1);else if(e.code==='Enter'||e.code==='Space')rotateSelected();else if(e.code==='KeyR'){resetPuzzle();return}game.draw()},update(){},draw(){base();for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const x=ox+c*cell,y=oy+r*cell;rect(x+3,y+3,cell-6,cell-6,'rgba(174,221,250,.055)',8);ctx.strokeStyle='rgba(174,221,250,.11)';ctx.lineWidth=1;ctx.strokeRect(x+3,y+3,cell-6,cell-6)}pieces.forEach(drawPipe);const sx=ox-35,sy=oy+2*cell+cell/2,tx=ox+4*cell+cell/2,ty=oy+5*cell+28;line(sx+6,sy,ox+8,sy,palette.gold);circle(sx,sy,8,palette.gold);line(tx,oy+5*cell-2,tx,ty-12,palette.cyan);circle(tx,ty,8,palette.cyan);text(tr('ВХОД','INPUT'),sx,sy-18,11,palette.gold,'center');text(tr('ВЫХОД','OUTPUT'),tx,ty+24,11,palette.cyan,'center');const selected=at(cursor.r,cursor.c);if(selected){const x=ox+cursor.c*cell,y=oy+cursor.r*cell;ctx.strokeStyle=palette.ice;ctx.lineWidth=2;ctx.strokeRect(x+5,y+5,cell-10,cell-10)}text(tr('ПОВОРОТЫ: ','ROTATIONS: ')+moves,ox,oy+rows*cell+54,14,palette.ice);text(tr('СОЕДИНИТЕ ВХОД С ВЫХОДОМ','CONNECT INPUT TO OUTPUT'),ox+cols*cell,oy+rows*cell+54,12,palette.muted,'right');text(tr('ENTER / SPACE — ПОВОРОТ · R — СБРОС','ENTER / SPACE — ROTATE · R — RESET'),W/2,H-20,11,palette.muted,'center')}};
 listenCanvas('pointerdown',e=>{if(paused||dead||solved)return;const box=canvas.getBoundingClientRect(),x=(e.clientX-box.left)/box.width*W,y=(e.clientY-box.top)/box.height*H,c=Math.floor((x-ox)/cell),r=Math.floor((y-oy)/cell);if(r<0||r>=rows||c<0||c>=cols||!at(r,c))return;if(cursor.r===r&&cursor.c===c)rotateSelected();else{cursor={r,c};onSound?.()}game.draw()})
 }
+else if(id==='memory'){
+const colors=['#2b8dbd','#8b68c8','#c47b43','#319b83'],bright=['#66d5ff','#c0a0ff','#ffc17f','#80edc5'];
+const x0=322,y0=128,size=140,gap=22;
+let sequence=[],phase='show',showIndex=0,clock=0,inputIndex=0,cursor=0,level=1,flash=-1,flashTimer=0;
+function beginNext(){sequence.push(Math.floor(Math.random()*4));phase='show';showIndex=0;clock=0;inputIndex=0;flash=-1}
+function selectPanel(index){if(phase!=='input'||dead||paused)return;cursor=index;flash=index;flashTimer=.18;if(index!==sequence[inputIndex]){phase='wrong';finish();return}inputIndex++;onSound?.();if(inputIndex>=sequence.length){setScore(score+level*100);level++;phase='between';clock=0}}
+game={
+init(){sequence=[Math.floor(Math.random()*4),Math.floor(Math.random()*4),Math.floor(Math.random()*4)];phase='show';showIndex=0;clock=0;inputIndex=0;cursor=0;level=1;flash=-1;flashTimer=0;setScore(0)},
+key(e){
+if(phase==='input'){
+if(e.code==='ArrowLeft'||e.code==='KeyA')cursor=cursor%2===1?cursor-1:cursor;
+else if(e.code==='ArrowRight'||e.code==='KeyD')cursor=cursor%2===0?cursor+1:cursor;
+else if(e.code==='ArrowUp'||e.code==='KeyW')cursor=cursor>=2?cursor-2:cursor;
+else if(e.code==='ArrowDown'||e.code==='KeyS')cursor=cursor<2?cursor+2:cursor;
+else if(e.code==='Enter'||e.code==='Space')selectPanel(cursor);
+}else if(phase==='between'&&(e.code==='Enter'||e.code==='Space'))beginNext();
+game.draw()
+},
+update(dt){
+if(flashTimer>0){flashTimer-=dt;if(flashTimer<=0)flash=-1}
+if(phase==='show'){clock+=dt;if(clock>=.58){clock=0;showIndex++;if(showIndex>=sequence.length){phase='input';showIndex=-1;inputIndex=0}}}
+else if(phase==='between'){clock+=dt;if(clock>=.85)beginNext()}
+},
+draw(){
+base();text('MEMORY PULSE',W/2,78,16,palette.ice,'center');
+for(let i=0;i<4;i++){
+const x=x0+(i%2)*(size+gap),y=y0+Math.floor(i/2)*(size+gap);
+const active=(phase==='show'&&showIndex>=0&&sequence[showIndex]===i)||(flash===i&&flashTimer>0);
+rect(x,y,size,size,active?bright[i]:colors[i],13);
+text(String(i+1),x+size/2,y+size/2+10,34,active?'#07182b':palette.ice,'center');
+if(phase==='input'&&cursor===i){ctx.strokeStyle=palette.ice;ctx.lineWidth=3;ctx.strokeRect(x+4,y+4,size-8,size-8)}
+}
+const status=phase==='show'?tr('ЗАПОМНИТЕ ПОСЛЕДОВАТЕЛЬНОСТЬ','MEMORIZE THE SEQUENCE'):phase==='input'?tr('ПОВТОРИТЕ ПОСЛЕДОВАТЕЛЬНОСТЬ','REPEAT THE SEQUENCE'):phase==='between'?tr('РАУНД ПРОЙДЕН','ROUND COMPLETE'):tr('ОШИБКА','MISTAKE');
+text(status,W/2,478,15,palette.cyan,'center');
+text(tr('УРОВЕНЬ: ','LEVEL: ')+level+'   '+tr('ШАГ: ','STEP: ')+(phase==='input'?inputIndex+'/'+sequence.length:'—'),W/2,508,12,palette.muted,'center');
+text(tr('СТРЕЛКИ — ВЫБОР · ENTER — ПОДТВЕРДИТЬ','ARROWS — SELECT · ENTER — CONFIRM'),W/2,532,10,palette.muted,'center')
+}
+};
+listenCanvas('pointerdown',e=>{
+if(phase!=='input'||paused||dead)return;
+const box=canvas.getBoundingClientRect(),x=(e.clientX-box.left)/box.width*W,y=(e.clientY-box.top)/box.height*H;
+const c=Math.floor((x-x0)/(size+gap)),r=Math.floor((y-y0)/(size+gap));
+if(c<0||c>1||r<0||r>1)return;
+const px=x0+c*(size+gap),py=y0+r*(size+gap);
+if(x>px+size||y>py+size)return;
+selectPanel(r*2+c);game.draw()
+})
+}
 else{game={init(){setScore(0)},update(){},draw(){base();text(tr('ИГРА НЕ НАЙДЕНА','GAME NOT FOUND'),W/2,H/2,24,palette.ice,'center')}}}
 return api}
 return{create,setLanguage(value){language=value==='en'?'en':'ru'}}
