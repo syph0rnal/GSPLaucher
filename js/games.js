@@ -89,6 +89,43 @@ if(x>px+size||y>py+size)return;
 selectPanel(r*2+c);game.draw()
 })
 }
+else if(id==='astro'){
+let ship,shots,rocks,crystals,rockTimer,crystalTimer,fireCooldown,elapsed,lives,invuln;
+const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+function spawnRock(){const r=14+Math.random()*15;rocks.push({x:30+Math.random()*(W-60),y:-r,vx:(Math.random()-.5)*110,vy:72+Math.random()*78,r,dead:false})}
+function spawnCrystal(){crystals.push({x:35+Math.random()*(W-70),y:-18,vx:(Math.random()-.5)*32,vy:48+Math.random()*30,r:9,phase:Math.random()*6,dead:false})}
+game={
+init(){ship={x:W/2,y:H-112,vx:0,vy:0,angle:-Math.PI/2};shots=[];rocks=[];crystals=[];rockTimer=.35;crystalTimer=2.2;fireCooldown=0;elapsed=0;lives=3;invuln=0;Object.keys(keys).forEach(k=>keys[k]=false);setScore(0)},
+key(e){if(e.code==='Space')e.preventDefault?.()},
+update(dt){
+elapsed+=dt;invuln=Math.max(0,invuln-dt);fireCooldown=Math.max(0,fireCooldown-dt);
+const turn=(keys.ArrowLeft||keys.KeyA?-1:0)+(keys.ArrowRight||keys.KeyD?1:0);ship.angle+=turn*3.35*dt;
+if(keys.ArrowUp||keys.KeyW){ship.vx+=Math.cos(ship.angle)*235*dt;ship.vy+=Math.sin(ship.angle)*235*dt}
+const damping=Math.pow(.988,dt*60);ship.vx*=damping;ship.vy*=damping;
+const speed=Math.hypot(ship.vx,ship.vy);if(speed>310){ship.vx=ship.vx/speed*310;ship.vy=ship.vy/speed*310}
+ship.x=(ship.x+ship.vx*dt+W)%W;ship.y=Math.max(48,Math.min(H-32,ship.y+ship.vy*dt));
+if(keys.Space&&fireCooldown<=0){shots.push({x:ship.x+Math.cos(ship.angle)*19,y:ship.y+Math.sin(ship.angle)*19,vx:ship.vx+Math.cos(ship.angle)*520,vy:ship.vy+Math.sin(ship.angle)*520,life:1.35});fireCooldown=.22;onSound?.()}
+rockTimer-=dt;if(rockTimer<=0){spawnRock();rockTimer=Math.max(.55,1.38-elapsed*.009)}
+crystalTimer-=dt;if(crystalTimer<=0){spawnCrystal();crystalTimer=4.1+Math.random()*1.2}
+shots.forEach(s=>{s.x+=s.vx*dt;s.y+=s.vy*dt;s.life-=dt});
+rocks.forEach(r=>{r.x+=r.vx*dt;r.y+=r.vy*dt;if(r.x< -r.r)r.x=W+r.r;if(r.x>W+r.r)r.x=-r.r});
+crystals.forEach(c=>{c.x+=c.vx*dt;c.y+=c.vy*dt;c.phase+=dt*3});
+for(const shot of shots){if(shot.life<=0)continue;for(const rock of rocks){if(!rock.dead&&distance(shot,rock)<rock.r+4){shot.life=0;rock.dead=true;setScore(score+25);break}}}
+for(const crystal of crystals){if(!crystal.dead&&distance(ship,crystal)<crystal.r+17){crystal.dead=true;setScore(score+100);onSound?.()}}
+if(invuln<=0){for(const rock of rocks){if(!rock.dead&&distance(ship,rock)<rock.r+13){lives--;invuln=1.45;ship.x=W/2;ship.y=H-112;ship.vx=0;ship.vy=0;if(lives<=0)finish('lose');break}}}
+shots=shots.filter(s=>s.life>0&&s.x>-20&&s.x<W+20&&s.y>-30&&s.y<H+30);
+rocks=rocks.filter(r=>!r.dead&&r.y<H+r.r+10);crystals=crystals.filter(c=>!c.dead&&c.y<H+25)
+},
+draw(){
+base();for(let i=0;i<48;i++)circle((i*197)%W,(i*83)%H,1,i%3?'rgba(177,220,255,.28)':'rgba(128,240,232,.45)');
+crystals.forEach(c=>{ctx.save();ctx.translate(c.x,c.y);ctx.rotate(c.phase*.35);ctx.beginPath();ctx.moveTo(0,-c.r);ctx.lineTo(c.r*.72,0);ctx.lineTo(0,c.r);ctx.lineTo(-c.r*.72,0);ctx.closePath();ctx.fillStyle=palette.cyan;ctx.fill();ctx.strokeStyle=palette.ice;ctx.lineWidth=2;ctx.stroke();ctx.restore()});
+rocks.forEach(r=>{ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);ctx.fillStyle='rgba(113,145,177,.28)';ctx.fill();ctx.strokeStyle=palette.muted;ctx.lineWidth=2;ctx.stroke();line(r.x-r.r*.35,r.y-r.r*.15,r.x+r.r*.22,r.y+r.r*.2,'rgba(220,240,255,.28)')});
+shots.forEach(s=>{ctx.save();ctx.globalAlpha=Math.max(.25,s.life);rect(s.x-2,s.y-8,4,16,palette.gold,2);ctx.restore()});
+if(invuln<=0||Math.floor(invuln*12)%2===0){ctx.save();ctx.translate(ship.x,ship.y);ctx.rotate(ship.angle);ctx.beginPath();ctx.moveTo(20,0);ctx.lineTo(-13,-11);ctx.lineTo(-7,0);ctx.lineTo(-13,11);ctx.closePath();ctx.fillStyle=palette.ice;ctx.fill();ctx.strokeStyle=palette.cyan;ctx.lineWidth=2;ctx.stroke();if(keys.ArrowUp||keys.KeyW){ctx.beginPath();ctx.moveTo(-9,-5);ctx.lineTo(-23,0);ctx.lineTo(-9,5);ctx.closePath();ctx.fillStyle=palette.pink;ctx.fill()}ctx.restore()}
+text(tr('ЖИЗНИ: ','LIVES: ')+lives,40,52,13,palette.ice);text(tr('АСТЕРОИДЫ: ','ASTEROIDS: ')+rocks.length,480,52,13,palette.muted,'center');text(tr('КРИСТАЛЛЫ +100 · КАМНИ +25','CRYSTALS +100 · ASTEROIDS +25'),920,52,11,palette.cyan,'right');text(tr('A / D — ПОВОРОТ · W — УСКОРЕНИЕ · SPACE — ОГОНЬ','A / D — TURN · W — THRUST · SPACE — FIRE'),W/2,H-16,11,palette.muted,'center')
+}
+};
+}
 else{game={init(){setScore(0)},update(){},draw(){base();text(tr('ИГРА НЕ НАЙДЕНА','GAME NOT FOUND'),W/2,H/2,24,palette.ice,'center')}}}
 return api}
 return{create,setLanguage(value){language=value==='en'?'en':'ru'}}
