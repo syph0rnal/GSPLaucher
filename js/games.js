@@ -111,7 +111,7 @@ shots.forEach(s=>{s.x+=s.vx*dt;s.y+=s.vy*dt;s.life-=dt});
 rocks.forEach(r=>{r.x+=r.vx*dt;r.y+=r.vy*dt;if(r.x< -r.r)r.x=W+r.r;if(r.x>W+r.r)r.x=-r.r});
 crystals.forEach(c=>{c.x+=c.vx*dt;c.y+=c.vy*dt;c.phase+=dt*3});
 for(const shot of shots){if(shot.life<=0)continue;for(const rock of rocks){if(!rock.dead&&distance(shot,rock)<rock.r+4){shot.life=0;rock.dead=true;setScore(score+25);break}}}
-for(const crystal of crystals){if(!crystal.dead&&distance(ship,crystal)<crystal.r+17){crystal.dead=true;setScore(score+100);onSound?.()}}
+for(const crystal of crystals){if(!crystal.dead&&distance(ship,crystal)<crystal.r+17){crystal.dead=true;setScore(score+100)}}
 if(invuln<=0){for(const rock of rocks){if(!rock.dead&&distance(ship,rock)<rock.r+13){lives--;invuln=1.45;ship.x=W/2;ship.y=H-112;ship.vx=0;ship.vy=0;if(lives<=0)finish('lose');break}}}
 shots=shots.filter(s=>s.life>0&&s.x>-20&&s.x<W+20&&s.y>-30&&s.y<H+30);
 rocks=rocks.filter(r=>!r.dead&&r.y<H+r.r+10);crystals=crystals.filter(c=>!c.dead&&c.y<H+25)
