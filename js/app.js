@@ -7,10 +7,11 @@ const catalog=[
 {id:'invaders',name:'Space Defense',icon:'✧',genre:'ШУТЕР',desc:'Защищайте сектор от волн вражеских кораблей.',keys:'← → — ДВИЖЕНИЕ · SPACE — ОГОНЬ',players:'1 ИГРОК'},
 {id:'astro',name:'Astro Salvage',icon:'✦',genre:'ШУТЕР',desc:'Пилотируйте корабль, разбивайте астероиды и собирайте энергетические кристаллы.',keys:'A / D ИЛИ ← / → — ПОВОРОТ · W / ↑ — УСКОРЕНИЕ · SPACE — ОГОНЬ',players:'1 ИГРОК'},
 {id:'runner',name:'Neon Runner',icon:'⌁',genre:'РАННЕР',desc:'Перепрыгивайте препятствия и продержитесь как можно дольше.',keys:'SPACE / ↑ — ПРЫЖОК',players:'1 ИГРОК'},
-{id:'tetris',name:'Block System',icon:'▦',genre:'ГОЛОВОЛОМКА',desc:'Собирайте полные линии из падающих блоков.',keys:'← → — ДВИЖЕНИЕ · ↑ — ПОВОРОТ · ↓ — УСКОРИТЬ',players:'1 ИГРОК'},
+{id:'tetris',name:'Block System',icon:'▦',genre:'ГОЛОВОЛОМКА',desc:'Собирайте полные линии из падающих блоков.',keys:'← → — ДВИЖЕНИЕ · ↑ — ПОВОРОТ · ↓ — УСКОРИТЬ · SPACE — МГНОВЕННОЕ ПАДЕНИЕ',players:'1 ИГРОК'},
 {id:'merge',name:'2048',icon:'▧',genre:'ЛОГИКА',desc:'Объединяйте одинаковые плитки и соберите 2048.',keys:'СТРЕЛКИ / WASD — СДВИГ ПОЛЯ',players:'1 ИГРОК'},
 {id:'mines',name:'Сапёр',icon:'▩',genre:'ЛОГИКА',desc:'Откройте безопасные клетки и отметьте все мины.',keys:'КЛИК — ОТКРЫТЬ · ПКМ — ФЛАГ',players:'1 ИГРОК'},
 {id:'circuit',name:'Circuit Link',icon:'⌘',genre:'ЛОГИКА',desc:'Поверните сегменты и восстановите энергетический маршрут от входа до выхода.',keys:'СТРЕЛКИ / WASD — ВЫБОР · ENTER / SPACE — ПОВОРОТ · R — СБРОС',players:'1 ИГРОК'},
+{id:'echo',name:'Echo Maze',icon:'⌖',genre:'ЛОГИКА',desc:'Исследуйте тёмный лабиринт с помощью звуковых импульсов, соберите три осколка и найдите выход.',keys:'СТРЕЛКИ / WASD — ДВИЖЕНИЕ · SPACE — ЭХО-ИМПУЛЬС · R — СБРОС',players:'1 ИГРОК'},
 {id:'memory',name:'Memory Pulse',icon:'✦',genre:'ЛОГИКА',desc:'Запоминайте последовательность световых импульсов и повторяйте её без ошибок.',keys:'СТРЕЛКИ / WASD — ВЫБОР · ENTER / SPACE — ПОДТВЕРДИТЬ',players:'1 ИГРОК'},
 {id:'gravity',name:'Gravity Shift',icon:'⇅',genre:'ПЛАТФОРМЕР',desc:'Переключайте гравитацию, собирайте энергетические ядра и откройте выход.',keys:'A / D ИЛИ ← / → — ДВИЖЕНИЕ · SPACE — ПРЫЖОК · Q / E — СМЕНА ГРАВИТАЦИИ · R — СБРОС',players:'1 ИГРОК'}
 ];
@@ -23,10 +24,11 @@ breakout:{name:'Neon Breaker',genre:'ARCADE',desc:'Break the blocks and keep the
 invaders:{name:'Space Defense',genre:'SHOOTER',desc:'Defend the sector from waves of enemy ships.',keys:'← → — MOVE · SPACE — FIRE',players:'1 PLAYER'},
 astro:{name:'Astro Salvage',genre:'SHOOTER',desc:'Pilot your ship, break asteroids and collect energy crystals.',keys:'A / D OR ← / → — TURN · W / ↑ — THRUST · SPACE — FIRE',players:'1 PLAYER'},
 runner:{name:'Neon Runner',genre:'RUNNER',desc:'Jump over obstacles and survive for as long as possible.',keys:'SPACE / ↑ — JUMP',players:'1 PLAYER'},
-tetris:{name:'Block System',genre:'PUZZLE',desc:'Complete full lines with falling blocks.',keys:'← → — MOVE · ↑ — ROTATE · ↓ — SOFT DROP',players:'1 PLAYER'},
+tetris:{name:'Block System',genre:'PUZZLE',desc:'Complete full lines with falling blocks.',keys:'← → — MOVE · ↑ — ROTATE · ↓ — SOFT DROP · SPACE — HARD DROP',players:'1 PLAYER'},
 merge:{name:'2048',genre:'LOGIC',desc:'Merge matching tiles and create the 2048 tile.',keys:'ARROWS / WASD — MOVE TILES',players:'1 PLAYER'},
 mines:{name:'Minesweeper',genre:'LOGIC',desc:'Reveal safe cells and mark every mine.',keys:'CLICK — REVEAL · RIGHT CLICK — FLAG',players:'1 PLAYER'},
 circuit:{name:'Circuit Link',genre:'LOGIC',desc:'Rotate the pipe segments and restore the energy route from input to output.',keys:'ARROWS / WASD — SELECT · ENTER / SPACE — ROTATE · R — RESET',players:'1 PLAYER'},
+echo:{name:'Echo Maze',genre:'PUZZLE',desc:'Explore a dark maze with echo pulses, collect three data shards and find the exit.',keys:'ARROWS / WASD — MOVE · SPACE — ECHO PULSE · R — RESET',players:'1 PLAYER'},
 memory:{name:'Memory Pulse',genre:'LOGIC',desc:'Remember the light-pulse sequence and repeat it without mistakes.',keys:'ARROWS / WASD — SELECT · ENTER / SPACE — CONFIRM',players:'1 PLAYER'},
 gravity:{name:'Gravity Shift',genre:'PLATFORMER',desc:'Flip gravity, collect energy cores and unlock the exit.',keys:'A / D OR ← / → — MOVE · SPACE — JUMP · Q / E — FLIP GRAVITY · R — RESET',players:'1 PLAYER'}
 }};
