@@ -353,6 +353,90 @@ text(tr('A / D — ДВИЖЕНИЕ · SPACE — ПРЫЖОК · Q / E — СМ�
 }
 };
 }
+else if(id==='gridlock'){
+const cell=68,ox=276,oy=65,cols=6,rows=6;
+const initial=[
+{id:'target',x:0,y:2,len:2,axis:'h',color:palette.pink},
+{id:'H',x:1,y:0,len:2,axis:'h',color:palette.blue},
+{id:'A',x:2,y:1,len:2,axis:'v',color:palette.cyan},
+{id:'D',x:3,y:4,len:2,axis:'h',color:palette.gold},
+{id:'B',x:4,y:1,len:3,axis:'v',color:'#8fa8ff'}
+];
+let cars=[],selected=null,cursor={x:0,y:0},moves=0;
+function resetPuzzle(){
+cars=initial.map(car=>({...car}));
+selected=null;cursor={x:0,y:0};moves=0;setScore(500);game.draw()
+}
+function carAt(x,y){
+return cars.find(car=>car.axis==='h'?y===car.y&&x>=car.x&&x<car.x+car.len:x===car.x&&y>=car.y&&y<car.y+car.len)
+}
+function canOccupy(car,nx,ny){
+for(let i=0;i<car.len;i++){
+const x=nx+(car.axis==='h'?i:0),y=ny+(car.axis==='v'?i:0);
+if(x<0||x>=cols||y<0||y>=rows)return false;
+for(const other of cars){
+if(other===car)continue;
+const occupied=other.axis==='h'?y===other.y&&x>=other.x&&x<other.x+other.len:x===other.x&&y>=other.y&&y<other.y+other.len;
+if(occupied)return false
+}
+}
+return true
+}
+function moveSelected(dx,dy){
+const car=cars.find(item=>item.id===selected);if(!car)return;
+if((car.axis==='h'&&dy!==0)||(car.axis==='v'&&dx!==0))return;
+const nx=car.x+dx,ny=car.y+dy;
+if(car.id==='target'&&dx>0&&nx===5){
+car.x=5;moves++;setScore(score+500);game.draw();finish('win');return
+}
+if(!canOccupy(car,nx,ny))return;
+car.x=nx;car.y=ny;cursor={x:car.x,y:car.y};moves++;setScore(Math.max(0,500-moves*10));onSound?.()
+}
+game={
+init(){resetPuzzle()},
+key(e){
+if(e.code==='KeyR'){resetPuzzle();return}
+const directions={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]};
+if(e.code==='Enter'){
+if(selected)selected=null;
+else{const car=carAt(cursor.x,cursor.y);if(car)selected=car.id}
+}else if(directions[e.code]){
+const [dx,dy]=directions[e.code];
+if(selected)moveSelected(dx,dy);
+else{cursor.x=Math.max(0,Math.min(cols-1,cursor.x+dx));cursor.y=Math.max(0,Math.min(rows-1,cursor.y+dy))}
+}
+game.draw()
+},
+update(){},
+draw(){
+base();
+rect(ox-5,oy-5,cols*cell+10,rows*cell+10,'rgba(150,205,244,.08)',8);
+for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
+ctx.strokeStyle='rgba(174,221,250,.16)';ctx.lineWidth=1;ctx.strokeRect(ox+x*cell,oy+y*cell,cell,cell)
+}
+cars.forEach(car=>{
+const x=ox+car.x*cell+5,y=oy+car.y*cell+5,w=(car.axis==='h'?car.len:1)*cell-10,h=(car.axis==='v'?car.len:1)*cell-10;
+rect(x,y,w,h,car.color,9);
+rect(x+(car.axis==='h'?12:8),y+(car.axis==='v'?12:8),w-(car.axis==='h'?24:16),h-(car.axis==='v'?24:16),'rgba(5,22,43,.3)',5);
+text(car.id==='target'?'EXIT CAR':car.id,x+w/2,y+h/2+5,car.id==='target'?12:14,palette.bg,'center');
+if(selected===car.id){ctx.strokeStyle=palette.ice;ctx.lineWidth=3;ctx.strokeRect(x+2,y+2,w-4,h-4)}
+});
+if(!selected){ctx.strokeStyle=palette.ice;ctx.lineWidth=2;ctx.strokeRect(ox+cursor.x*cell+3,oy+cursor.y*cell+3,cell-6,cell-6)}
+line(ox+cols*cell,oy+2*cell+cell/2,ox+cols*cell+28,oy+2*cell+cell/2,palette.cyan);
+text('EXIT',ox+cols*cell+34,oy+2*cell+cell/2+5,11,palette.cyan);
+text(tr('ХОДЫ: ','MOVES: ')+moves,ox,oy+rows*cell+30,13,palette.ice);
+text(tr('ВЫБЕРИТЕ МАШИНУ И ОСВОБОДИТЕ КРАСНУЮ','SELECT CARS AND CLEAR THE RED CAR'),W/2,oy+rows*cell+54,11,palette.muted,'center');
+text(tr('СТРЕЛКИ — ВЫБОР / ДВИЖЕНИЕ · ENTER — ВЗЯТЬ / ОТПУСТИТЬ · R — СБРОС','ARROWS — SELECT / MOVE · ENTER — PICK / DROP · R — RESET'),W/2,H-16,10,palette.muted,'center')
+}
+};
+listenCanvas('pointerdown',e=>{
+if(paused||dead)return;
+const box=canvas.getBoundingClientRect(),x=Math.floor((e.clientX-box.left)/box.width*W),y=Math.floor((e.clientY-box.top)/box.height*H);
+const cx=Math.floor((x-ox)/cell),cy=Math.floor((y-oy)/cell);
+if(cx<0||cx>=cols||cy<0||cy>=rows)return;
+cursor={x:cx,y:cy};const car=carAt(cx,cy);selected=car?car.id:null;game.draw()
+})
+}
 else{game={init(){setScore(0)},update(){},draw(){base();text(tr('ИГРА НЕ НАЙДЕНА','GAME NOT FOUND'),W/2,H/2,24,palette.ice,'center')}}}
 return api}
 return{create,setLanguage(value){language=value==='en'?'en':'ru'}}
