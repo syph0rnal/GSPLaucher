@@ -437,6 +437,127 @@ if(cx<0||cx>=cols||cy<0||cy>=rows)return;
 cursor={x:cx,y:cy};const car=carAt(cx,cy);selected=car?car.id:null;game.draw()
 })
 }
+
+else if(id==='siege'){
+const cols=16,rows=7,cell=52,left=64,top=70,cost=50,range=170;
+const path=[
+{x:left+cell*.5,y:top+cell*1.5},
+{x:left+cell*15.5,y:top+cell*1.5},
+{x:left+cell*15.5,y:top+cell*5.5},
+{x:left+cell*.5,y:top+cell*5.5},
+{x:left-22,y:top+cell*5.5}
+];
+let turrets=[],enemies=[],bullets=[],cursor={col:2,row:0},credits=300,lives=10,wave=1,spawned=0,spawnTimer=3.5;
+const waveSize=5;
+const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+function isPathCell(col,row){return row===1||row===5||(col===15&&row>=1&&row<=5)}
+function cellCenter(col,row){return{x:left+cell*(col+.5),y:top+cell*(row+.5)}}
+function resetDefense(){
+turrets=[];enemies=[];bullets=[];cursor={col:2,row:0};credits=300;lives=10;wave=1;spawned=0;spawnTimer=3.5;setScore(0);game.draw()
+}
+function placeTurret(col,row){
+if(col<0||col>=cols||row<0||row>=rows||isPathCell(col,row)||credits<cost)return false;
+if(turrets.some(t=>t.col===col&&t.row===row))return false;
+const p=cellCenter(col,row);turrets.push({col,row,x:p.x,y:p.y,cooldown:.12});credits-=cost;onSound?.();game.draw();return true
+}
+function spawnEnemy(){
+enemies.push({x:path[0].x,y:path[0].y,segment:0,progress:0,total:0,hp:wave,maxHp:wave,speed:145+wave*25,r:10,dead:false});
+spawned++
+}
+function moveEnemy(enemy,dt){
+let remaining=enemy.speed*dt;
+while(remaining>0&&enemy.segment<path.length-1){
+const a=path[enemy.segment],b=path[enemy.segment+1],dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy);
+const step=Math.min(remaining,len-enemy.progress);
+enemy.progress+=step;enemy.total+=step;remaining-=step;
+enemy.x=a.x+dx/len*enemy.progress;enemy.y=a.y+dy/len*enemy.progress;
+if(enemy.progress>=len){enemy.segment++;enemy.progress=0}
+}
+if(enemy.segment>=path.length-1){enemy.dead=true;lives--}
+}
+function updateTurrets(dt){
+for(const turret of turrets){
+turret.cooldown=Math.max(0,turret.cooldown-dt);
+if(turret.cooldown>0)continue;
+let target=null,best=-1;
+for(const enemy of enemies){
+if(enemy.dead||distance(turret,enemy)>range)continue;
+if(enemy.total>best){best=enemy.total;target=enemy}
+}
+if(target){bullets.push({x:turret.x,y:turret.y,target,speed:520,dead:false});turret.cooldown=.48}
+}
+}
+function updateBullets(dt){
+for(const bullet of bullets){
+if(bullet.dead)continue;
+if(bullet.target.dead){bullet.dead=true;continue}
+const dx=bullet.target.x-bullet.x,dy=bullet.target.y-bullet.y,d=Math.hypot(dx,dy),step=bullet.speed*dt;
+if(d<=step+bullet.target.r){
+bullet.target.hp--;bullet.dead=true;
+if(bullet.target.hp<=0&&!bullet.target.dead){
+bullet.target.dead=true;credits+=15;setScore(score+20)
+}
+}else if(d>0){bullet.x+=dx/d*step;bullet.y+=dy/d*step}
+}
+bullets=bullets.filter(b=>!b.dead);
+}
+game={
+init(){resetDefense()},
+key(e){
+if(e.code==='KeyR'){resetDefense();return}
+const delta={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[e.code];
+if(delta){cursor.col=Math.max(0,Math.min(cols-1,cursor.col+delta[0]));cursor.row=Math.max(0,Math.min(rows-1,cursor.row+delta[1]));game.draw()}
+else if(e.code==='Enter')placeTurret(cursor.col,cursor.row)
+},
+update(dt){
+if(spawned<waveSize){spawnTimer-=dt;if(spawnTimer<=0){spawnEnemy();spawnTimer=.82}}
+for(const enemy of enemies)if(!enemy.dead)moveEnemy(enemy,dt);
+enemies=enemies.filter(enemy=>!enemy.dead);
+if(lives<=0){finish('lose');return}
+updateTurrets(dt);updateBullets(dt);
+if(spawned>=waveSize&&enemies.length===0&&bullets.length===0){
+if(wave>=3){setScore(score+200);finish('win');return}
+wave++;spawned=0;spawnTimer=1.8;setScore(score+50)
+}
+},
+draw(){
+base();
+for(let row=0;row<rows;row++)for(let col=0;col<cols;col++){
+const x=left+col*cell,y=top+row*cell;
+ctx.strokeStyle='rgba(174,221,250,.13)';ctx.lineWidth=1;ctx.strokeRect(x,y,cell,cell)
+}
+ctx.beginPath();ctx.moveTo(path[0].x,path[0].y);for(let i=1;i<path.length;i++)ctx.lineTo(path[i].x,path[i].y);
+ctx.lineWidth=27;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='rgba(61,127,177,.36)';ctx.stroke();
+ctx.beginPath();ctx.moveTo(path[0].x,path[0].y);for(let i=1;i<path.length;i++)ctx.lineTo(path[i].x,path[i].y);
+ctx.lineWidth=3;ctx.strokeStyle='rgba(128,240,232,.62)';ctx.stroke();
+turrets.forEach(t=>{
+circle(t.x,t.y,17,'rgba(98,196,255,.25)');circle(t.x,t.y,11,palette.blue);circle(t.x,t.y,4,palette.ice);
+ctx.strokeStyle=palette.cyan;ctx.lineWidth=2;ctx.strokeRect(t.x-15,t.y-15,30,30)
+});
+enemies.forEach(enemy=>{
+circle(enemy.x,enemy.y,enemy.r,palette.red);circle(enemy.x-3,enemy.y-3,2,palette.ice);
+rect(enemy.x-12,enemy.y-17,24,4,'rgba(255,255,255,.2)',2);
+rect(enemy.x-12,enemy.y-17,24*(enemy.hp/enemy.maxHp),4,palette.gold,2)
+});
+bullets.forEach(b=>circle(b.x,b.y,4,palette.gold));
+const p=cellCenter(cursor.col,cursor.row);
+ctx.strokeStyle=isPathCell(cursor.col,cursor.row)?palette.red:palette.ice;ctx.lineWidth=2;ctx.strokeRect(p.x-cell/2+3,p.y-cell/2+3,cell-6,cell-6);
+text(tr('ВОЛНА: ','WAVE: ')+wave+'/3',40,38,14,palette.ice);
+text(tr('ЯДРО: ','CORE: ')+lives,480,38,14,palette.gold,'center');
+text(tr('КРЕДИТЫ: ','CREDITS: ')+credits,920,38,14,palette.cyan,'right');
+text(tr('ТУРЕЛЬ: ','TURRET: ')+cost,40,490,12,palette.muted);
+text(tr('СТРЕЛКИ — ВЫБОР · ENTER / КЛИК — ПОСТАВИТЬ · R — СБРОС','ARROWS — SELECT · ENTER / CLICK — BUILD · R — RESET'),W/2,H-16,11,palette.muted,'center')
+}
+};
+listenCanvas('pointerdown',e=>{
+if(paused||dead)return;
+const box=canvas.getBoundingClientRect(),x=(e.clientX-box.left)/box.width*W,y=(e.clientY-box.top)/box.height*H;
+const col=Math.floor((x-left)/cell),row=Math.floor((y-top)/cell);
+if(col<0||col>=cols||row<0||row>=rows)return;
+cursor={col,row};placeTurret(col,row)
+})
+}
+
 else{game={init(){setScore(0)},update(){},draw(){base();text(tr('ИГРА НЕ НАЙДЕНА','GAME NOT FOUND'),W/2,H/2,24,palette.ice,'center')}}}
 return api}
 return{create,setLanguage(value){language=value==='en'?'en':'ru'}}
